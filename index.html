@@ -25,6 +25,11 @@
 		width:var(--pl-container-w);
 	}
 
+	.curved-header{
+		color red;
+		display: inline-block;
+	}
+
 	.pl-img-container{
 		position: relative;
 	}
@@ -49,15 +54,31 @@
 </style>
 <body>
 <div class="plasylist-container">
-	<header>
-		Playlist Name
-	</header>
+	<div class="curved-header">
+	</div>
 	<div class="pl-img-container">
 		<img src="http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg">
 		<div class="circle"></div>
 	</div>
 </div>
 <script type="text/javascript">
+
+function curvedText(text, radius){
+	var text = text.split("");
+	var deg_offset = 100 / text.length;
+	var deg_origin = 0;
+	var class_index = document.getElementsByClassName("curved-header")[0];
+	console.dir(class_index);
+
+	text.forEach((ea) => {
+    	ea = `<p style='height:${radius}px;position:absolute;transform:rotate(${deg_origin}deg);transform-origin:0 100%'>${ea}</p>`;
+    	class_index.innerHTML += ea;
+    	deg_origin += deg_offset;
+  });
+}
+
+curvedText("test", 110)
+
 	
 </script>
 </body>
