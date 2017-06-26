@@ -20,3 +20,4 @@ class Playlist {
 		pl_container.appendTo(this.container_name);
 	}	
 }
+
