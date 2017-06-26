@@ -3,14 +3,33 @@
 <head>
 	<title></title>
 </head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <style type="text/css">
 	body{
 		margin: 0;
 	}
 
-	#main-container{
-		max-width:80%;
+	#menu{
+		height: 60px;
+		background-color: #001f3f;
+		border-top: 3px solid #0074D9 ; 
+		color:white;
+		font-size: 30px;
+	}
+
+	#menu-container{
+		width:80%;
 		margin: 0 auto;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	#main-container{
+		width:80%;
+		margin: 0 auto;
+		margin-top: 20px;
 		display: flex;
 		flex-wrap: wrap;
 		flex-direction: row;
@@ -59,39 +78,27 @@
 
 </style>
 <body>
-<header id="menu">
-	
-</header>
-<div id="main-container">
-	<div class="plasylist-container">
-		<div class="curved-header">
-			Playlist Header
+	<header id="menu">
+		<div id="menu-container">
+			<!-- <span class="glyphicon glyphicon-plus-sign"></span> -->
+			<button>test</button>
 		</div>
-		<div class="pl-img-container">
-			<img src="http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg">
-			<div class="circle"></div>
+	</header>
+	<div id="main-container">
+		<div class="plasylist-container">
+			<div class="curved-header">
+				Playlist Header
+			</div>
+			<div class="pl-img-container">
+				<img src="http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg">
+				<div class="circle"></div>
+			</div>
 		</div>
 	</div>
-</div>
+	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://connect.soundcloud.com/sdk/sdk-3.1.2.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="playlist.js"></script>
 <script src="main.js"></script>
-<script type="text/javascript">
-function curvedText(text, radius){
-	var text = text.split("");
-	var deg_offset = 100 / text.length;
-	var deg_origin = 0;
-	var class_index = document.getElementsByClassName("curved-header")[0];
-	console.dir(class_index);
-
-	text.forEach((ea) => {
-    	ea = `<p style='height:${radius}px;position:absolute;transform:rotate(${deg_origin}deg);transform-origin:0 100%'>${ea}</p>`;
-    	class_index.innerHTML += ea;
-    	deg_origin += deg_offset;
-  });
-}
-curvedText("test", 110)
-</script>
 </body>
 </html>
