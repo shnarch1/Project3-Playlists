@@ -6,13 +6,19 @@
 <style type="text/css">
 	body{
 		margin: 0;
+	}
+
+	#main-container{
+		max-width:80%;
+		margin: 0 auto;
 		display: flex;
+		flex-wrap: wrap;
 		flex-direction: row;
-		justify-content: space-between;
+		justify-content: space-around;
 	}
 
 	.plasylist-container{
-		--pl-container-w:100%;
+		--pl-container-w:300px;
 		--pl-img-w: 300px;
 		--pl-img-h: 300px;
 		--circle-w: 50px;
@@ -53,16 +59,22 @@
 
 </style>
 <body>
-<div class="plasylist-container">
-	<div class="curved-header">
-	</div>
-	<div class="pl-img-container">
-		<img src="http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg">
-		<div class="circle"></div>
+<div id="main-container">
+	<div class="plasylist-container">
+		<div class="curved-header">
+		</div>
+		<div class="pl-img-container">
+			<img src="http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg">
+			<div class="circle"></div>
+		</div>
 	</div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://connect.soundcloud.com/sdk/sdk-3.1.2.js"></script>
+<script src="playlist.js"></script>
+<script src="soundcloud.js"></script>
+<script src="main.js"></script>
 <script type="text/javascript">
-
 function curvedText(text, radius){
 	var text = text.split("");
 	var deg_offset = 100 / text.length;
@@ -76,10 +88,7 @@ function curvedText(text, radius){
     	deg_origin += deg_offset;
   });
 }
-
 curvedText("test", 110)
-
-	
 </script>
 </body>
 </html>
