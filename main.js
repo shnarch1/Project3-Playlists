@@ -5,6 +5,14 @@ fetch("api/playlist").then(function(response){return response.json()})
 					 		playlist.build();
 					 	}
 					 })
+					 .then(function(){
+					 	 $(".btn-add-pl").click((e)=>{
+ 						 var new_pl_popup = new newPlaylistPopup('new_pl.html', 'add-new-pl');
+ 						 new_pl_popup.build();
+ 						 });
+					 })
+
+
 
 
 // function curvedText(text, radius){
