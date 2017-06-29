@@ -8,6 +8,7 @@
 <style type="text/css">
 	body{
 		margin: 0;
+		/*filter: blur(5px);*/
 	}
 
 	#menu{
@@ -99,6 +100,23 @@
 		border-radius: 50%;
 	}
 
+	#popup-container{
+	    position: fixed;
+		top: 0; left: 0; right: 0; bottom: 0;
+	    background-color: rgba(0, 31, 63, 0.5);
+	    display: flex;
+	    flex-direction: row;
+	    justify-content: center;
+	    align-items: center;
+	}
+
+	#popup-main{
+		background-color: white;
+	}
+
+
+
+
 
 </style>
 <body>
@@ -125,10 +143,17 @@
 			</div>
 		</div>
 	</div>
+
+<!-- 	<div id="popup-container">
+		<div id=popup-main>
+			
+		</div>
+	</div> -->
 	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="playlist.js"></script>
+<script src="popup.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

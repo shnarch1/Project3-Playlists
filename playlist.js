@@ -1,6 +1,6 @@
 class Playlist {
 	
-	constructor(_id, name, img_url, container_name){
+	constructor(_id=null, name=null, img_url=null, container_name=null){
 		this._id = _id;
 		this.name = name;
 		this.img_url = img_url;
