@@ -11,19 +11,42 @@
 	}
 
 	#menu{
-		height: 60px;
 		background-color: #001f3f;
-		border-top: 3px solid #0074D9 ; 
-		color:white;
-		font-size: 30px;
+		border-top: 3px solid #0074D9 ;
 	}
 
 	#menu-container{
+		padding: 15px;
 		width:80%;
 		margin: 0 auto;
 		display: flex;
+		flex-direction: row;
 		justify-content: space-between;
+	}
+
+	#menu-container .btn-add-pl{
+		color: white;
+		background-color: transparent;
+		border: none;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
 		align-items: center;
+	}
+
+	.btn-add-pl span:first-child{
+		margin-right:10px;
+	}
+
+	#menu-container .btn-add-pl:focus{
+		outline: none;
+	}
+
+	.glyphicon-search{
+		position: absolute;
+		z-index: 3;
+		right:5px;
+		top: 10px;
 	}
 
 	#main-container{
@@ -76,12 +99,19 @@
 		border-radius: 50%;
 	}
 
+
 </style>
 <body>
 	<header id="menu">
 		<div id="menu-container">
-			<!-- <span class="glyphicon glyphicon-plus-sign"></span> -->
-			<button>test</button>
+			<button class="btn-add-pl">
+				<span class=" glyphicon glyphicon-plus-sign"></span>
+				<span>Add new playlist</span>
+			</button>
+			<div class="input-group">
+	      		<input type="search" class="form-control" placeholder="Search playlists">
+	      		<span class="glyphicon glyphicon-search"></span>
+			</div>
 		</div>
 	</header>
 	<div id="main-container">
