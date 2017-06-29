@@ -41,5 +41,5 @@ class newPlaylistPopup extends BasePopup{
 	}
 }
 
-test = new BasePopup();
-test.build();
+// test = new BasePopup();
+// test.build();
