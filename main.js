@@ -3,14 +3,13 @@ fetch("api/playlist").then(function(response){return response.json()})
 					 	for(i=0; i<data.data.length; i++){
 					 		var playlist = new Playlist(data.data[i].id, data.data[i].name, data.data[i].image, '#main-container');
 					 		playlist.build();
-					 	}
+					 	}					 	
 					 })
-					 .then(function(){
-					 	 $(".btn-add-pl").click((e)=>{
- 						 var new_pl_popup = new newPlaylistPopup('new_pl.html', 'add-new-pl');
- 						 new_pl_popup.build();
- 						 });
-					 })
+ 
+ $(".btn-add-pl").click((e)=>{
+ 	var new_pl_popup = new newPlaylistPopup(null, 'add-new-pl');
+ 	new_pl_popup.build();
+ });
 
 
 
