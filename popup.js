@@ -63,10 +63,10 @@ class newPlaylistPopup extends BasePopup{
 
 	build(){
 		this._build_popup_container();
-		this._build_content();
+		this._build_add_new_playlist();
 	}
 
-	_build_content(){
+	_build_add_new_playlist(){
 		var header = $("<header>", {text: "Add New Plalist"})
 						.appendTo(this.popup_main);
 
@@ -80,7 +80,8 @@ class newPlaylistPopup extends BasePopup{
 		var name_label = $("<label>", {text: "Playlist Name"})
 						.appendTo(inputs);
 
-		var name_input = $("<input>", {type: "text",
+		var name_input = $("<input>", {id: "pl-name",
+						 type: "text",
 						 name:"pl_name",
 						 placeholder: "e.g Blood Sugar Sex Magic"})
 						.appendTo(name_label);
@@ -89,7 +90,8 @@ class newPlaylistPopup extends BasePopup{
 		var url_label = $("<label>", {text: "Playlist URL"})
 						.appendTo(inputs);
 
-		var url_input = $("<input>", {type: "text",
+		var url_input = $("<input>", {id: 'pl-url',
+						 type: "text",
 						 name:"pl_url",
 						 placeholder: "http://"})
 						.appendTo(url_label);
@@ -98,11 +100,12 @@ class newPlaylistPopup extends BasePopup{
 						.appendTo(form);
 
 		var next_btn = $("<input>", {id: "next",
+						 click: (e)=>{this._next(e)},
 						 type: "submit",
 						 value:"Next"})
 						.appendTo(buttons);
 
-		var next_btn = $("<input>", {id: "next",
+		var reset_btn = $("<input>", {id: "next",
 		 				 type: "reset",
 		 				 value:"Reset Fields"})
 						.appendTo(buttons);
@@ -110,6 +113,55 @@ class newPlaylistPopup extends BasePopup{
 		var image_preview = $("<div>", {class:"image-preview"})
 						.appendTo(content)
 						.append($("<span>", {text: "Preview"}));
+	}
+
+	_next(e){
+		e.preventDefault();
+		this.playlist.name = this.popup_main.find('#pl-name').val();
+		this.playlist.img_url = this.popup_main.find('#pl-url').val();
+		this._build_add_plsylist_songs();
+	}
+
+	_build_add_plsylist_songs(){
+		this.popup_main.empty();
+		this.popup_main.removeClass("add-new-pl");
+		this.popup_main.addClass("add-pl-songs");
+
+		var header = $("<header>", {text: "Add Playlist Songs"})
+						.appendTo(this.popup_main);
+		
+		var form = $("<form>").appendTo(this.popup_main);
+
+		var new_songs_inputs = $("<div>", {id: "new-songs-inputs"})
+						.appendTo(form);
+
+		var new_song = $("<div>", {class: "new-song"})
+						.append($("<label>", {text: "Song URL"})
+									.append($("<input>", {type: "text", name:"song-url"})))
+						.append($("<label>", {text: "Name:"})
+									.append($("<input>", {type: "text", name:"song-name"})));
+
+		var buttons = $("<div>", {id: "buttons"}).appendTo(form);
+
+		var btn_add_song = $("<button>", {click: (e)=>{this._add_new_song_inputs(e)}})
+							.append($("<span>", {class: "glyphicon glyphicon-plus-sign"}))
+							.append($("<span>", {text: "Add another song"}))
+							.appendTo(buttons);
+
+		var submit = $("<input>", {type: "submit", value: "FINISH & SAVE"})
+							.appendTo(buttons);
+
+	}
+
+	_add_new_song_inputs(e){
+		e.preventDefault();
+
+		var new_song = $("<div>", {class: "new-song"})
+						.append($("<label>", {text: "Song URL"})
+									.append($("<input>", {type: "text", name:"song-url"})))
+						.append($("<label>", {text: "Name:"})
+									.append($("<input>", {type: "text", name:"song-name"})));
+		new_song.appendTo(this.popup_main.find("#new-songs-inputs"));
 	}
 
 }

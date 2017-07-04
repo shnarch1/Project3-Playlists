@@ -1,0 +1,37 @@
+
+.add-pl-songs .new-song{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.add-pl-songs .new-song input{
+		margin-left: 5px;
+}
+
+.add-pl-songs #buttons{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-top: 5px;
+}
+
+.add-pl-songs #buttons input[type=submit]{
+	background-color: var(--btn-bg-color);
+	color: var(--btn-txt-color);
+	border: none;
+
+}
+
+.add-pl-songs #buttons input[type=submit]:focus{
+	outline: none;
+}
+
+.add-pl-songs #buttons button{
+	background-color: transparent;
+	border: none;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+}

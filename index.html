@@ -5,6 +5,7 @@
 </head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 <style type="text/css">
 	body{
 		margin: 0;
@@ -101,6 +102,8 @@
 	}
 
 	#popup-container{
+		--btn-bg-color: rgba(0, 31, 63, 0.5);
+		--btn-txt-color: white;
 	    position: fixed;
 		top: 0; left: 0; right: 0; bottom: 0;
 	    background-color: rgba(0, 31, 63, 0.5);
@@ -111,7 +114,7 @@
 	    z-index: 1000;
 	}
 
-	.add-new-pl{
+	#popup-main{
 		background-color: white;
 		display: flex;
 		flex-direction: column;
@@ -119,81 +122,21 @@
 		width: 550px;
 	}
 
-	.add-new-pl header{
+	#popup-main header{
 		border-bottom: solid thin lightgray;
 		margin-bottom: 20px;
 		font-size: x-large;
 	}
 
-	.add-new-pl-content{
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-	}
 
-	.add-new-pl-content form{
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		flex-grow: 1;
-	}
-
-	.add-new-pl-content input{
-		width:100%;
-		display: block;
-		font-weight: normal;
-		padding-left: 2px;
-	}
-
-	.add-new-pl-content label{
-		display: block;
-	}
-
-	.add-new-pl-content-btns{
-		display: flex;
-		justify-content: space-between;
-	}
-
-	.add-new-pl-content-btns input{
-		width: 45%;
-		color: white;
-		border: none;
-		padding: 5px;
-		background-color: rgba(0, 31, 63, 0.5);
-	}
-
-	.add-new-pl-content-btns input:focus{
-		outline: none;
-
-	}
-
-	.add-new-pl-content-btns input:active{
-		background-color: rgba(0, 31, 63, 0.8);
-	}
-
-	.image-preview{
-		position: relative;
-		margin-left: 20px;
-		width:200px;
-		height:200px;
-		background-color: lightgray;
-	}
-
-	.image-preview span{
-		position: absolute;
-		top:65px;
-		left: 10px;
-		display: block;
-		color: white;
-		font-size: 50px;
-		transform: rotate(45deg);
-	}
 </style>
+ <link rel="stylesheet" type="text/css" href="new_pl.css">
+ <link rel="stylesheet" type="text/css" href="new_pl_songs.css">
 <body>
 	<header id="menu">
 		<div id="menu-container">
 			<button class="btn-add-pl">
-				<span class=" glyphicon glyphicon-plus-sign"></span>
+				<span class="glyphicon glyphicon-plus-sign"></span>
 				<span>Add new playlist</span>
 			</button>
 			<div class="input-group">
@@ -215,7 +158,8 @@
 	</div>
 <!-- 
 	<div id="popup-container">
-		<div id="popup-main" class="add-new-pl">
+		<div id="popup-main" class="add-pl-songs">
+
 		</div>
 	</div> -->
 	
