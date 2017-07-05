@@ -1,10 +1,12 @@
-fetch("api/playlist").then(function(response){return response.json()})
-					 .then(function(data){
-					 	for(i=0; i<data.data.length; i++){
-					 		var playlist = new Playlist(data.data[i].id, data.data[i].name, data.data[i].image, '#main-container');
-					 		playlist.build();
-					 	}					 	
-					 })
+// fetch("api/playlist").then(function(response){return response.json()})
+// 					 .then(function(data){
+// 					 	for(i=0; i<data.data.length; i++){
+// 					 		var playlist = new Playlist(data.data[i].name, data.data[i].image, data.data[i].songs);
+// 					 		playlist.build(data.data[i].id, '#main-container');
+// 					 	}					 	
+// 					 })
+ 
+ Playlist.buildAll();
  
  $(".btn-add-pl").click((e)=>{
  	var new_pl_popup = new newPlaylistPopup(null, 'add-new-pl');

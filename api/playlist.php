@@ -89,7 +89,7 @@ function playlists() {
 		  $okresult = false;
 			$data = NULL;
 			$p =& $_POST;
-			var_dump($_POST);
+			// var_dump($_POST);
 			if( !empty($p['name']) && !empty($p['image']) && !empty($p['songs']) && is_array($p['songs']) ) {					
 				var_dump("avi");	
 				$okresult = true;
@@ -154,7 +154,7 @@ function playlist_songs($id) {
 		
 function response($success=FALSE,$payload=array(),$forceResult=FALSE) {
 	$status = $success ? 200 : 400;
-	$ret = array('success' => $success);
+	$ret = array("success" => $success);
 	if($payload || $forceResult) { $ret['data'] = $payload; }
 	header('Content-Type: application/json');
 	http_response_code($status);

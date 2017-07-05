@@ -148,7 +148,9 @@ class newPlaylistPopup extends BasePopup{
 							.append($("<span>", {text: "Add another song"}))
 							.appendTo(buttons);
 
-		var submit = $("<input>", {type: "submit", value: "FINISH & SAVE"})
+		var submit = $("<input>", {type: "submit",
+								   value: "FINISH & SAVE",
+								   click: (e) => {this._finish_and_save(e)}})
 							.appendTo(buttons);
 
 	}
@@ -162,6 +164,44 @@ class newPlaylistPopup extends BasePopup{
 						.append($("<label>", {text: "Name:"})
 									.append($("<input>", {type: "text", name:"song-name"})));
 		new_song.appendTo(this.popup_main.find("#new-songs-inputs"));
+	}
+
+	_finish_and_save(e){
+		e.preventDefault();
+		var songs  = [];
+		$(".add-pl-songs").find(".new-song").each(function(index, el) {
+			var inputs = $(el).find('input');
+			var song_url = $(inputs[0]).val(); 
+			var song_name = $(inputs[1]).val(); 
+			songs.push({"name": song_name, "url": song_url});
+		});
+		this.playlist.songs = songs;
+		
+		var formData = new FormData();
+		formData.append("name", this.playlist.name);
+		formData.append("image", this.playlist.img_url);
+		for(var i = 0; i < this.playlist.songs.length; i++){
+			formData.append("songs[" + i + "][name]",  this.playlist.songs[i].name);
+			formData.append("songs[" + i + "][url]",  this.playlist.songs[i].url);
+		}
+		
+
+		var myInit = {method: 'POST',
+    				  body:formData
+    				}
+		fetch('http://localhost/playlist/api/playlist', myInit)
+		.then((response)=>{return new Promise((resolve, reject)=>{
+			if(response.status == 200){
+				resolve(response.status);
+			}
+			else{
+				reject(response.status);
+			}
+		})})
+		.then((data)=>{this._remove(); Playlist.buildAll()})
+		.catch((e)=> {$(this.popup_main)
+						.append($("<p>", {class: "err-msg",
+										  text:e + ": An error occurred. Please try again later."}))});
 	}
 
 }
