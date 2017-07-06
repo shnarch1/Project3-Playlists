@@ -27,6 +27,10 @@
 	outline: none;
 }
 
+.add-pl-songs #buttons input[type=submit]:active{
+	background-color: rgba(0, 31, 63, 0.8);
+}
+
 .add-pl-songs #buttons button{
 	background-color: transparent;
 	border: none;
@@ -34,6 +38,10 @@
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
+}
+
+.add-pl-songs #buttons button:focus{
+	outline: none;
 }
 
 .add-pl-songs .err-msg{
