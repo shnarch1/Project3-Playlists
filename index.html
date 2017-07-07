@@ -73,6 +73,7 @@
 		justify-content: center;
 		align-items: center;
 		width:var(--pl-container-w);
+		opacity: .85;
 	}
 
 	.curved-header{
@@ -91,7 +92,46 @@
 		height: var(--pl-img-h);
 		border-radius: 50%;
 	}
+
+
+	.del-edit-btns-container{
+		visibility: hidden;
+		position: absolute;
+		top: 10px;
+		left: 105px;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		width: 30%;
+	}
+
+	.del-btn{
+		margin-right: 5px;
+	}
+
+	.del-edit-btns-container .del-btn, .del-edit-btns-container .edit-btn{
+		position: relative;
+		width:calc(var(--circle-w) / 2);
+		height:calc(var(--circle-h) / 2);
+		background-color: white;
+		border-radius: 50%;
+	}
+
+	.del-edit-btns-container button{
+		position: absolute;
+		top: 2px;
+		left: -2px;
+		font-size: large;
+		background-color: transparent;
+		border: none;
+	}
+
+	.del-edit-btns-container button:focus{
+		outline: none;
+	}
+
 	.circle{
+		position: relative;
 		position: absolute;
 		width: var(--circle-w);
 		height: var(--circle-h);
@@ -99,6 +139,29 @@
 		top: calc((var(--pl-img-h) / 2) - (var(--circle-h) / 2));
 		background-color: white;
 		border-radius: 50%;
+		z-index: 100;
+	}
+
+	.circle .play-pl{
+		position: absolute;
+		left: 8px;
+		top: 10px;
+		visibility: hidden;
+		background-color: transparent;
+		border: none;
+	}
+
+	.circle .play-pl:focus{
+		outline: none;
+	}
+
+	.plasylist-container:hover .circle .play-pl, 
+	.plasylist-container:hover .del-edit-btns-container{
+		visibility: visible;
+	}
+
+	.plasylist-container:hover{
+		opacity: 1;
 	}
 
 	#popup-container{
@@ -152,7 +215,23 @@
 			</div>
 			<div class="pl-img-container">
 				<img src="http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg">
-				<div class="circle"></div>
+				<div class="del-edit-btns-container">
+					<div class="del-btn">
+						<button>
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</div>
+					<div class="edit-btn">
+						<button>
+							<span class="glyphicon glyphicon-pencil"></span>
+						</button>
+					</div>
+				</div>
+				<div class="circle">
+					<button class="play-pl">
+						<span class="glyphicon glyphicon-play"></span>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
