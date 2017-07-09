@@ -19,7 +19,7 @@ class Playlist {
 		var del_edit_btns_container = $("<div>", {class: "del-edit-btns-container"})
 									.appendTo(pl_img_container);
 
-		var del_btn = $("<div>", {class: "del-btn"})
+		var del_btn = $("<div>", {class: "del-btn", click: (e) => {this.delete(e)}})
 									.append($("<button>")
 										.append($("<sapn>", {class: "glyphicon glyphicon-remove"})))
 									.appendTo(del_edit_btns_container);
@@ -39,7 +39,7 @@ class Playlist {
 	}
 
 	static buildAll(){
-		// $('#main-container').empty();
+		$('#main-container').empty();
 		fetch("api/playlist").then((response)=>{return response.json()})
 				 .then(function(data){
 				 	for(var i=0; i<data.data.length; i++){
@@ -47,6 +47,34 @@ class Playlist {
 				 		playlist.build(data.data[i].id, '#main-container');
 				 	}					 	
 				 })
-	}	
+	}
+
+	delete(e){
+		var pl_container = e.target.closest('.plasylist-container');
+		var pl_id = pl_container.dataset.id;
+		Playlist.delete_playlist(pl_id)
+		.then(() => {$(pl_container).remove()});
+		// .then((res => {return res.json()}))
+		// .then((status) => {console.dir(d);});
+	}
+
+	static delete_playlist(id){
+	
+		return new Promise((resolve) => {
+			var myInit = {method: 'DELETE'};
+			var route = "http://localhost/playlist/api/playlist/" + id;
+
+			var test = fetch(route, myInit)
+			.then((response) => {
+				if(response.ok){
+					resolve(response);
+				}
+				else{
+					return Promise.reject(response.statusText)
+				}
+			}).catch((err) => {console.dir("DEBUG: delete_playlist() fetch error - " + " ' " + err + " '")});
+			});
+	}
+
 }
 
