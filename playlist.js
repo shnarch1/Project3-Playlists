@@ -1,6 +1,7 @@
 class Playlist {
 	
-	constructor(name=null, img_url=null, songs=null){
+	constructor(id=null, name=null, img_url=null, songs=null){
+		this.id =id;
 		this.name = name;
 		this.img_url = img_url;
 		this.songs = songs;
@@ -24,7 +25,7 @@ class Playlist {
 										.append($("<sapn>", {class: "glyphicon glyphicon-remove"})))
 									.appendTo(del_edit_btns_container);
 
-		var edit_btn = $("<div>", {class: "edit-btn"})
+		var edit_btn = $("<div>", {class: "edit-btn", click: (e) => {this.edit(e)}})
 									.append($("<button>")
 										.append($("<sapn>", {class: "glyphicon glyphicon-pencil"})))
 									.appendTo(del_edit_btns_container);
@@ -43,7 +44,7 @@ class Playlist {
 		fetch("api/playlist").then((response)=>{return response.json()})
 				 .then(function(data){
 				 	for(var i=0; i<data.data.length; i++){
-				 		var playlist = new Playlist(data.data[i].name, data.data[i].image, data.data[i].songs);
+				 		var playlist = new Playlist(null, data.data[i].name, data.data[i].image, data.data[i].songs);
 				 		playlist.build(data.data[i].id, '#main-container');
 				 	}					 	
 				 })
@@ -74,6 +75,63 @@ class Playlist {
 				}
 			}).catch((err) => {console.dir("DEBUG: delete_playlist() fetch error - " + " ' " + err + " '")});
 			});
+	}
+
+	static get(pl_id){
+		return new Promise((resolve) => {
+			var get_pl_route = "http://localhost/playlist/api/playlist/" + pl_id;
+			fetch(get_pl_route)
+			.then((response) => {return response.json()})
+			.then((data) => {resolve(data)});
+		})
+		
+	}
+
+	static get_songs(pl_id){
+		return new Promise((resolve) => {
+			var get_songs_route = "http://localhost/playlist/api/playlist/" + pl_id + "/songs";
+			fetch(get_songs_route)
+			.then((response) => {return response.json()})
+			.then((data) => {resolve(data)});
+		})
+	}
+
+	edit(e){
+		var pl_container = e.target.closest('.plasylist-container');
+		var pl_id = pl_container.dataset.id;
+
+		var promises = [];
+		var pl = Playlist.get(pl_id);
+		var songs  = Playlist.get_songs(pl_id);
+		promises.push(pl);
+		promises.push(songs);
+
+		Promise.all(promises).then((data) => {
+			if(!Array.isArray(data[0])){
+				var id = data[0].data.id;
+				var img_url = data[0].data.image;
+				var name = data[0].data.name;
+
+				var songs = data[1].data.songs;
+			}
+			else{
+				var id = data[1].data.id;
+				var img_url = data[1].data.image;
+				var name = data[1].data.name;
+
+				var songs = data[0].data.songs;
+			}
+
+			var edit_pl_popup = new editPlaylistPopup(null,'add-new-pl',
+												id, name, img_url, songs);
+			edit_pl_popup.build();
+		})
+
+		// var route = "http://localhost/playlist/api/playlist/" + pl_id; 
+		// fetch(route).then((response)=>{return response.json()}).then((d)=>{console.dir(d);})
+
+		// var pop = new editPlaylistPopup(null, 'add-new-pl', pl_id, "avi", "avi", [{'name': 'name_avi', 'url': 'avi_url'}]);
+		// pop.build();
 	}
 
 }

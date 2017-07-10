@@ -173,7 +173,10 @@ class newPlaylistPopup extends BasePopup{
 			var inputs = $(el).find('input');
 			var song_url = $(inputs[0]).val(); 
 			var song_name = $(inputs[1]).val(); 
-			songs.push({"name": song_name, "url": song_url});
+			if(song_url != "" && song_name !=""){
+				songs.push({"name": song_name, "url": song_url});
+			}
+			
 		});
 		this.playlist.songs = songs;
 		
@@ -206,6 +209,193 @@ class newPlaylistPopup extends BasePopup{
 
 }
 
+class editPlaylistPopup extends newPlaylistPopup{
+	constructor(url, class_name, pl_id, pl_name, pl_img_url, pl_songs){
+		super(url, class_name);
+		this.playlist.id = pl_id;
+		this.playlist.name = pl_name;
+		this.playlist.img_url =  pl_img_url;
+		this.playlist.songs = pl_songs;
+	}
+
+	build(){
+		this._build_popup_container();
+		this._build_edit_playlist();
+	}
+
+	_build_edit_playlist(){
+		var header = $("<header>", {text: "Edit Plalist"})
+						.appendTo(this.popup_main);
+
+		var content = $("<div>", {class: "add-new-pl-content"})
+						.appendTo(this.popup_main);
+
+		var form = $("<form>").appendTo(content);
+
+		var inputs = $("<div>").appendTo(form);
+
+		var name_label = $("<label>", {text: "Playlist Name"})
+						.appendTo(inputs);
+
+		var name_input = $("<input>", {id: "pl-name",
+						 type: "text",
+						 value: this.playlist.name,
+						 name:"pl_name",
+						 placeholder: "e.g Blood Sugar Sex Magic"})
+						.appendTo(name_label);
+		name_input.focus();
+
+		var url_label = $("<label>", {text: "Playlist URL"})
+						.appendTo(inputs);
+
+		var url_input = $("<input>", {id: 'pl-url',
+						 type: "text",
+						 value: this.playlist.img_url,
+						 name:"pl_url",
+						 placeholder: "http://"})
+						.appendTo(url_label);
+
+		var buttons = $("<div>", {class: "add-new-pl-content-btns"})
+						.appendTo(form);
+
+		var next_btn = $("<input>", {id: "next",
+						 click: (e)=>{this._next(e)},
+						 type: "submit",
+						 value:"Next"})
+						.appendTo(buttons);
+
+		var reset_btn = $("<input>", {id: "reset",
+		 				 type: "reset",
+		 				 value:"Reset Fields"})
+						.appendTo(buttons);
+
+		var image_preview = $("<div>", {class:"image-preview"})
+						.appendTo(content)
+						.append($("<span>", {text: "Preview"}));
+	}
+
+	_next(e){
+		e.preventDefault();
+		this.playlist.name = this.popup_main.find('#pl-name').val();
+		this.playlist.img_url = this.popup_main.find('#pl-url').val();
+		this._build_edit_plsylist_songs();
+	}
+
+	_build_edit_plsylist_songs(){
+		this.popup_main.empty();
+		this.popup_main.removeClass("add-new-pl");
+		this.popup_main.addClass("add-pl-songs");
+
+		var header = $("<header>", {text: "Edit Playlist Songs"})
+						.appendTo(this.popup_main);
+		
+		var form = $("<form>").appendTo(this.popup_main);
+
+		var new_songs_inputs = $("<div>", {id: "new-songs-inputs"})
+						.appendTo(form);
+
+		var new_song = $("<div>", {class: "new-song"})
+						.append($("<label>", {text: "Song URL"})
+									.append($("<input>", {type: "text", name:"song-url"})))
+						.append($("<label>", {text: "Name:"})
+									.append($("<input>", {type: "text", name:"song-name"})));
+
+		var buttons = $("<div>", {id: "buttons"}).appendTo(form);
+
+		for(var i = 0; i<this.playlist.songs.length; i++){
+			var new_song = $("<div>", {class: "new-song"})
+						.append($("<label>", {text: "Song URL"})
+									.append($("<input>", {type: "text", name:"song-url", value: this.playlist.songs[i].url})))
+						.append($("<label>", {text: "Name:"})
+									.append($("<input>", {type: "text", name:"song-name", value: this.playlist.songs[i].name})));
+			new_song.appendTo(this.popup_main.find("#new-songs-inputs"));
+		}
+
+		var btn_add_song = $("<button>", {click: (e)=>{this._add_new_song_inputs(e)}})
+							.append($("<span>", {class: "glyphicon glyphicon-plus-sign"}))
+							.append($("<span>", {text: "Add another song"}))
+							.appendTo(buttons);
+
+		var submit = $("<input>", {type: "submit",
+								   value: "FINISH & SAVE",
+								   click: (e) => {this._finish_and_save(e)}})
+							.appendTo(buttons);
+
+	}
+
+	_update_playlist(){
+
+		return new Promise((resolve) => {
+			var formData = new FormData();
+			formData.append("name", this.playlist.name);
+			formData.append("image", this.playlist.img_url);
+
+			var myInit = {method: 'POST',
+    				  	  body:formData
+    					}
+    		var update_pl_route = 'http://localhost/playlist/api/playlist/' + this.playlist.id;
+
+    		fetch(update_pl_route, myInit)
+    		.then((response) => {
+    			if(response.ok){
+    				resolve(response)
+    			}
+    		})
+		})
+	}
+
+		_update_songs(){
+
+		return new Promise((resolve) => {
+			var songs  = [];
+			$(".add-pl-songs").find(".new-song").each(function(index, el) {
+				var inputs = $(el).find('input');
+				var song_url = $(inputs[0]).val(); 
+				var song_name = $(inputs[1]).val(); 
+				if(song_url != "" && song_name !=""){
+					songs.push({"name": song_name, "url": song_url});
+				}
+			});
+			this.playlist.songs = songs;
+
+			var formData = new FormData();
+			for(var i = 0; i < this.playlist.songs.length; i++){
+			formData.append("songs[" + i + "][name]",  this.playlist.songs[i].name);
+			formData.append("songs[" + i + "][url]",  this.playlist.songs[i].url);
+			}
+
+			var myInit = {method: 'POST',
+    				  	  body:formData
+    					}
+
+			var update_songs_route = 'http://localhost/playlist/api/playlist/'
+									+ this.playlist.id + '/songs';
+
+			fetch(update_songs_route, myInit)
+    		.then((response) => {
+    			if(response.ok){
+    				resolve(response)
+    			}
+    		})
+		})
+	}
+
+
+
+	_finish_and_save(e){
+		e.preventDefault();
+
+		var promises = [];
+		var update_pl = this._update_playlist();
+		var update_songs = this._update_songs();
+		promises.push(update_pl);
+		promises.push(update_songs);
+
+		Promise.all(promises).then((data)=>{this._remove(); Playlist.buildAll()})
+	}
+
+
+}
 
 // test = new BasePopup('new_pl.html', 'add-new-pl');
 // test.build();
