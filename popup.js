@@ -91,6 +91,7 @@ class newPlaylistPopup extends BasePopup{
 						.appendTo(inputs);
 
 		var url_input = $("<input>", {id: 'pl-url',
+						 change: (e) => {this._update_preview(e)},
 						 type: "text",
 						 name:"pl_url",
 						 placeholder: "http://"})
@@ -110,9 +111,62 @@ class newPlaylistPopup extends BasePopup{
 		 				 value:"Reset Fields"})
 						.appendTo(buttons);
 
-		var image_preview = $("<div>", {class:"image-preview"})
-						.appendTo(content)
+		var image_preview_container = $("<div>", {class:"image-preview-container"})
+						.appendTo(content);
+
+		var image_preview_template = $("<div>", {class:"image-preview-template"})
+						.appendTo(image_preview_container)
 						.append($("<span>", {text: "Preview"}));
+	}
+
+	// _update_preview(e){
+	// 	var img_url = e.target.value;
+	// 	console.dir(img_url);
+	// 	$(".image-preview-container").empty();
+	// 	$("<img>", {src: img_url, error: (e) => {
+	// 		$("<div>", {class:"image-preview-template"})
+	// 					.appendTo($(".image-preview-container"))
+	// 					.append($("<span>", {text: "Preview"}));
+	// 	}}).appendTo($(".image-preview-container"));
+	// }
+
+	_update_preview(e){
+		var img_url = e.target.value;
+		this._check_image_url(img_url)
+		.then(this._create_image_preview(img_url), this._create_image_preview_template());
+
+	}
+
+	_create_image_preview(img_url){
+		console.dir("avi");
+		$(".image-preview-container").empty();
+		$("<img>", {src: img_url}).appendTo($(".image-preview-container"));
+	}
+
+	_create_image_preview_template(){
+		console.dir("erorr");
+		$(".image-preview-container").empty();
+		$("<div>", {class:"image-preview-template"})
+						.appendTo(".image-preview-container")
+						.append($("<span>", {text: "Preview"}));
+	}
+
+
+
+	_check_image_url(url){
+		return new Promise((resolve, reject) => {
+			resolve();
+			// var img = $("<img>", {src: url});
+			// $(img).on("load", () => {
+			// 	console.dir("loaded");
+			// 	resolve();
+			// })
+
+			// $(img).on("error", () => {
+			// 	console.dir("rejected");
+			// 	reject();
+			// })
+		})
 	}
 
 	_next(e){
@@ -224,7 +278,7 @@ class editPlaylistPopup extends newPlaylistPopup{
 	}
 
 	_build_edit_playlist(){
-		var header = $("<header>", {text: "Edit Plalist"})
+		var header = $("<header>", {text: "Edit Playlist"})
 						.appendTo(this.popup_main);
 
 		var content = $("<div>", {class: "add-new-pl-content"})
