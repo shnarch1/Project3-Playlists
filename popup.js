@@ -52,6 +52,15 @@ class BasePopup{
 		.then((content)=>{this.popup_main.append(content)})
 	}
 
+	static isUrlValid(user_input) {
+    var pattern = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$";
+    var url = new RegExp(pattern,"i");
+    if (url.test(user_input)) {
+        return true;
+    }
+    return false;
+}
+
 	
 }
 
@@ -67,7 +76,7 @@ class newPlaylistPopup extends BasePopup{
 	}
 
 	_build_add_new_playlist(){
-		var header = $("<header>", {text: "Add New Plalist"})
+		var header = $("<header>", {text: "Add New Playlist"})
 						.appendTo(this.popup_main);
 
 		var content = $("<div>", {class: "add-new-pl-content"})
@@ -91,11 +100,12 @@ class newPlaylistPopup extends BasePopup{
 						.appendTo(inputs);
 
 		var url_input = $("<input>", {id: 'pl-url',
-						 change: (e) => {this._update_preview(e)},
 						 type: "text",
 						 name:"pl_url",
 						 placeholder: "http://"})
 						.appendTo(url_label);
+
+		$(url_input).on('input', (e) => {this._update_preview(e)});
 
 		var buttons = $("<div>", {class: "add-new-pl-content-btns"})
 						.appendTo(form);
@@ -132,12 +142,21 @@ class newPlaylistPopup extends BasePopup{
 
 	_update_preview(e){
 		var img_url = e.target.value;
-		this._check_image_url(img_url)
-		.then(this._create_image_preview(img_url), this._create_image_preview_template());
+		if(BasePopup.isUrlValid(img_url) || img_url ==""){
+			$(e.target).css("outline-color", "initial");
+			this._check_image_url(img_url)
+			.then(this._create_image_preview, this._create_image_preview_template);
+		}
+		else{
+			$(e.target).css("outline-color", "#FF4136")
+			console.log("URL is not valid");
+		}
+		
 
 	}
 
 	_create_image_preview(img_url){
+		
 		console.dir("avi");
 		$(".image-preview-container").empty();
 		$("<img>", {src: img_url}).appendTo($(".image-preview-container"));
@@ -155,17 +174,16 @@ class newPlaylistPopup extends BasePopup{
 
 	_check_image_url(url){
 		return new Promise((resolve, reject) => {
-			resolve();
-			// var img = $("<img>", {src: url});
-			// $(img).on("load", () => {
-			// 	console.dir("loaded");
-			// 	resolve();
-			// })
+			var img = $("<img>", {src: url});
+			$(img).on("load", () => {
+				console.dir("loaded");
+				resolve(url);
+			})
 
-			// $(img).on("error", () => {
-			// 	console.dir("rejected");
-			// 	reject();
-			// })
+			$(img).on("error", () => {
+				console.dir("rejected");
+				reject();
+			})
 		})
 	}
 

@@ -51,6 +51,11 @@
 		max-height:200px;
 	}
 
+	.image-preview-container img{
+		width:200px;
+		height:200px;
+	}
+
 	.image-preview-template{
 		position: relative;
 		/*margin-left: 20px;*/
