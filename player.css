@@ -1,0 +1,204 @@
+#player-container{
+	--player-width: 600px;
+	--player-height: 250px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width:var(--player-width);
+	height: var(--player-height);
+	border-radius:120px / 120px;;
+	background-color: #fafafa;
+}
+
+#player-container #playlist-image .plasylist-container{
+		--pl-container-w:200px;
+		--pl-img-w: 200px;
+		--pl-img-h: 200px;
+		--circle-w: 30px;
+		--circle-h: 30px;
+		display: flex;
+		font: 26px Monaco, MonoSpace;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width:var(--pl-container-w);
+		opacity: .85;
+}
+
+audio{
+	width: 250px;
+}
+
+#songs-titles{
+	margin:  0 auto;
+	width:600px;
+	max-height: 250px;
+	background-color: #fafafa;
+	border-radius:120px / 120px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.song-container button{
+	background-color: transparent;
+	border: none;
+}
+
+.song-container button:focus{
+	outline: none
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#main-container{
+		width:80%;
+		margin: 0 auto;
+		margin-top: 20px;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+
+	.plasylist-container{
+		--pl-container-w:300px;
+		--pl-img-w: 300px;
+		--pl-img-h: 300px;
+		--circle-w: 50px;
+		--circle-h: 50px;
+		display: flex;
+		font: 26px Monaco, MonoSpace;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width:var(--pl-container-w);
+		opacity: .85;
+	}
+
+	.curved-header{
+		color red;
+		display: inline-block;
+	}
+
+	.pl-img-container{
+		position: relative;
+	}
+	
+
+	.pl-img-container img{
+		display: block; /*In order to remove the gap under the image*/
+		width: var(--pl-img-w);
+		height: var(--pl-img-h);
+		border-radius: 50%;
+	}
+
+
+	.del-edit-btns-container{
+		visibility: hidden;
+		position: absolute;
+		top: 10px;
+		left: 105px;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		width: 30%;
+	}
+
+	.del-btn{
+		margin-right: 5px;
+	}
+
+	.del-edit-btns-container .del-btn, .del-edit-btns-container .edit-btn{
+		position: relative;
+		width:calc(var(--circle-w) / 2);
+		height:calc(var(--circle-h) / 2);
+		background-color: white;
+		border-radius: 50%;
+	}
+
+	.del-edit-btns-container button{
+		position: absolute;
+		top: 2px;
+		left: -2px;
+		font-size: large;
+		background-color: transparent;
+		border: none;
+	}
+
+	.del-edit-btns-container button:focus{
+		outline: none;
+	}
+
+	.circle{
+		position: relative;
+		position: absolute;
+		width: var(--circle-w);
+		height: var(--circle-h);
+		left: calc(var(--pl-img-w) / 2 - var(--circle-w) / 2);
+		top: calc((var(--pl-img-h) / 2) - (var(--circle-h) / 2));
+		background-color: white;
+		border-radius: 50%;
+		z-index: 100;
+	}
+
+	.circle .play-pl{
+		position: absolute;
+		left: 8px;
+		top: 10px;
+		visibility: hidden;
+		background-color: transparent;
+		border: none;
+	}
+
+	.circle .play-pl:focus{
+		outline: none;
+	}
+
+	.plasylist-container:hover .circle .play-pl, 
+	.plasylist-container:hover .del-edit-btns-container{
+		visibility: visible;
+	}
+
+	.plasylist-container:hover{
+		opacity: 1;
+	}
+
+	#popup-container{
+		--btn-bg-color: rgba(0, 31, 63, 0.5);
+		--btn-txt-color: white;
+	    position: fixed;
+		top: 0; left: 0; right: 0; bottom: 0;
+	    background-color: rgba(0, 31, 63, 0.5);
+	    display: flex;
+	    flex-direction: row;
+	    justify-content: center;
+	    align-items: center;
+	    z-index: 1000;
+	}
+
+	#popup-main{
+		background-color: white;
+		display: flex;
+		flex-direction: column;
+		padding: 20px;
+		width: 550px;
+	}
+
+	#popup-main header{
+		border-bottom: solid thin lightgray;
+		margin-bottom: 20px;
+		font-size: x-large;
+	}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<style type="text/css">
+	body{
+		margin: 0;
+		/*filter: blur(5px);*/
+	}
+
+	#menu{
+		background-color: #001f3f;
+		border-top: 3px solid #0074D9 ;
+	}
+
+	#menu-container{
+		padding: 15px;
+		width:80%;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	#menu-container .btn-add-pl{
+		color: white;
+		background-color: transparent;
+		border: none;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.btn-add-pl span:first-child{
+		margin-right:10px;
+	}
+
+	#menu-container .btn-add-pl:focus{
+		outline: none;
+	}
+
+	.glyphicon-search{
+		position: absolute;
+		z-index: 3;
+		right:5px;
+		top: 10px;
+	}
+
+	
+
+
+</style>
+ <link rel="stylesheet" type="text/css" href="new_pl.css">
+ <link rel="stylesheet" type="text/css" href="new_pl_songs.css">
+ <link rel="stylesheet" type="text/css" href="player.css">
+<body>
+	<header id="menu">
+		<div id="menu-container">
+			<button class="btn-add-pl">
+				<span class="glyphicon glyphicon-plus-sign"></span>
+				<span>Add new playlist</span>
+			</button>
+			<div class="input-group">
+	      		<input type="search" class="form-control" placeholder="Search playlists">
+	      		<span class="glyphicon glyphicon-search"></span>
+			</div>
+		</div>
+	</header>
+	<div id="main-container">
+		<div id="player-container">
+			<div id="playlist-image"></div>
+			<div id="songs-continaer">
+				<div id=songs-player>
+					<audio controls>
+						<source  src="horse.ogg" type="audio/ogg">
+					</audio>
+				</div>
+			</div>
+		</div>
+
+		<div id="songs-titles">
+			<div class="song-container">
+				<button class="glyphicon glyphicon-play"></button>
+				<span>Song1</span>
+			</div>
+						<div class="song-container">
+				<button class="glyphicon glyphicon-play"></button>
+				<span>Song1</span>
+			</div>
+		</div>	
+	</div>
+<!-- 
+	<div id="popup-container">
+		<div id="popup-main" class="add-pl-songs">
+
+		</div>
+	</div> -->
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="playlist.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

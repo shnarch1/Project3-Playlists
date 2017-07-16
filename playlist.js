@@ -136,3 +136,27 @@ class Playlist {
 
 }
 
+class playerPlaylist extends Playlist{
+	constructor (id=null, name=null, img_url=null, songs=null){
+		super(id, name, img_url, songs);
+	}
+
+	build(id, container_name){
+		var pl_container = $("<div>", {class:"plasylist-container",
+									   "data-id":id});
+		var pl_header = $("<div>", {class:"curved-header",
+									text:this.name})
+									.appendTo(pl_container);
+		var pl_img_container = $("<div>", {class:"pl-img-container"})
+									.appendTo(pl_container);
+		var pl_img = $("<img>", {src:this.img_url}).appendTo(pl_img_container);
+
+		var pl_circle = $("<div>", {class:"circle"}).appendTo(pl_img_container);
+
+		var play_btn = $("<button>", {class: "play-pl"})
+									.append($("<span>", {class: "glyphicon glyphicon-play"}))
+									.appendTo(pl_circle);
+		
+		pl_container.appendTo(container_name);
+	}
+}
