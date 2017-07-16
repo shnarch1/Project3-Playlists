@@ -73,3 +73,11 @@
 		font-size: 50px;
 		transform: rotate(45deg);
 	}
+
+	.input-err:focus{
+		outline-color: red;
+	}
+
+	.input-valid:focus{
+		outline-color: green;
+	}

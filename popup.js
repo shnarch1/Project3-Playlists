@@ -52,7 +52,7 @@ class BasePopup{
 		.then((content)=>{this.popup_main.append(content)})
 	}
 
-	static isUrlValid(user_input) {
+	static isImgUrlValid(user_input) {
     var pattern = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$";
     var url = new RegExp(pattern,"i");
     if (url.test(user_input)) {
@@ -142,13 +142,23 @@ class newPlaylistPopup extends BasePopup{
 
 	_update_preview(e){
 		var img_url = e.target.value;
-		if(BasePopup.isUrlValid(img_url) || img_url ==""){
-			$(e.target).css("outline-color", "initial");
+		
+		if( img_url == "" ){
+			$(e.target).removeClass();
+		}
+
+		else if(BasePopup.isImgUrlValid(img_url)){
+			// $(e.target).css("outline-color", "initial");
+			$(e.target).addClass('input-valid');
 			this._check_image_url(img_url)
 			.then(this._create_image_preview, this._create_image_preview_template);
 		}
+
 		else{
-			$(e.target).css("outline-color", "#FF4136")
+			$(e.target).removeClass();
+			$(e.target).addClass('input-err');
+			// $(e.target).css("outline-color", "#FF4136");
+			this._create_image_preview_template();
 			console.log("URL is not valid");
 		}
 		
