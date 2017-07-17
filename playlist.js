@@ -153,8 +153,7 @@ class playerPlaylist extends Playlist{
 
 		var pl_circle = $("<div>", {class:"circle"}).appendTo(pl_img_container);
 
-		var play_btn = $("<button>", {class: "play-pl"})
-									.append($("<span>", {class: "glyphicon glyphicon-play"}))
+		var play_btn = $("<button>", {class: "play-pl glyphicon glyphicon-play"})
 									.appendTo(pl_circle);
 		
 		pl_container.appendTo(container_name);

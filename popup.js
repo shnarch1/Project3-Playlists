@@ -479,5 +479,35 @@ class editPlaylistPopup extends newPlaylistPopup{
 
 }
 
+class playerPopup extends BasePopup{
+	constructor(url, class_name){
+		super(url, class_name);
+		this.playlist = new playerPlaylist();
+	}
+
+	build(){
+		this._build_popup_container();
+		this._build_player();
+	}
+
+	_build_popup_container(){
+		super._build_popup_container();
+		this.popup_container.attr("id", "player-popup-container")
+		this.popup_main.removeClass();
+		this.popup_main.attr("id","player-main");
+		this.songs_container = $("<div>", {id: "songs-container"})
+								.appendTo(this.popup_container);
+	}
+
+	_build_player(){
+		var img_container = $("<div>", {id: "player-img-container"})
+								.appendTo(this.popup_main);
+		this.playlist.img_url = "http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg";
+		this.playlist.build(null, "#player-img-container");
+		var controls = $("<audio>", {controls: true})
+								.appendTo(this.popup_main);
+	}
+}
+
 // test = new BasePopup('new_pl.html', 'add-new-pl');
 // test.build();
