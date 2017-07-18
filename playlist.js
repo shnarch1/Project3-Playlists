@@ -32,7 +32,7 @@ class Playlist {
 
 		var pl_circle = $("<div>", {class:"circle"}).appendTo(pl_img_container);
 
-		var play_btn = $("<button>", {class: "play-pl"})
+		var play_btn = $("<button>", {class: "play-pl", click: (e) => {this._play(e)}})
 									.append($("<span>", {class: "glyphicon glyphicon-play"}))
 									.appendTo(pl_circle);
 		
@@ -96,6 +96,35 @@ class Playlist {
 		})
 	}
 
+	static get_playlist(pl_id){
+		return new Promise((resolve) => {
+			var promises = [];
+			var pl = Playlist.get(pl_id);
+			var songs  = Playlist.get_songs(pl_id);
+			promises.push(pl);
+			promises.push(songs);
+
+			var pl = new Playlist();
+
+
+			Promise.all(promises).then((data) => {
+			if(!Array.isArray(data[0])){
+				pl.id = data[0].data.id;
+				pl.img_url = data[0].data.image;
+				pl.name = data[0].data.name;
+				pl.songs = data[1].data.songs;
+			}
+			else{
+				pl.id = data[1].data.id;
+				pl.img_url = data[1].data.image;
+				pl.name = data[1].data.name;
+				pl.songs = data[0].data.songs;
+			}
+			resolve(pl);
+		})
+	})
+}
+
 	edit(e){
 		var pl_container = e.target.closest('.plasylist-container');
 		var pl_id = pl_container.dataset.id;
@@ -132,6 +161,17 @@ class Playlist {
 
 		// var pop = new editPlaylistPopup(null, 'add-new-pl', pl_id, "avi", "avi", [{'name': 'name_avi', 'url': 'avi_url'}]);
 		// pop.build();
+	}
+
+	_play(e){
+		var pl_id = e.target.closest(".plasylist-container").dataset.id;
+		Playlist.get_playlist(pl_id)
+		.then((pl) => {
+			console.log("before create player");
+			console.dir(pl)
+			var player = new playerPopup();
+			player.build(pl);
+		})
 	}
 
 }

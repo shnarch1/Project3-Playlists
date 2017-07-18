@@ -485,9 +485,9 @@ class playerPopup extends BasePopup{
 		this.playlist = new playerPlaylist();
 	}
 
-	build(){
+	build(pl){
 		this._build_popup_container();
-		this._build_player();
+		this._build_player(pl);
 	}
 
 	_build_popup_container(){
@@ -495,17 +495,34 @@ class playerPopup extends BasePopup{
 		this.popup_container.attr("id", "player-popup-container")
 		this.popup_main.removeClass();
 		this.popup_main.attr("id","player-main");
-		this.songs_container = $("<div>", {id: "songs-container"})
-								.appendTo(this.popup_container);
+		// this.songs_container = $("<div>", {id: "songs-container"})
+								// .appendTo(this.popup_container);
 	}
 
-	_build_player(){
+	_build_player(pl){ 
 		var img_container = $("<div>", {id: "player-img-container"})
 								.appendTo(this.popup_main);
-		this.playlist.img_url = "http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg";
+		this.playlist.img_url = pl.img_url;
 		this.playlist.build(null, "#player-img-container");
+		var controls_and_songs_container = $("<div>", {id: "controls-songs-container"})
+								.appendTo(this.popup_main)
 		var controls = $("<audio>", {controls: true})
-								.appendTo(this.popup_main);
+								.appendTo(controls_and_songs_container);
+
+		var now_playing = $("<span>", {id: "now-playing", text:"Now Playing: " + pl.name})
+								.appendTo(controls_and_songs_container);
+
+		var songs_container = $("<ol>", {id: "songs-container"})
+								.appendTo(controls_and_songs_container);
+		$(pl.songs).each((index, el) => {
+			$("<source>", {src: el.url, type:"audio/mp3"}).appendTo(controls);
+			this._build_song(el.name).appendTo('#songs-container')
+		});
+	}
+
+	_build_song(name){
+		var song_container = $("<li>", {class: "song-container", text: name});	
+		return song_container;
 	}
 }
 

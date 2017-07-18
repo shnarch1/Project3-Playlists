@@ -20,21 +20,21 @@
 	width:var(--player-width);
 	height: var(--player-height);
 	border-radius:120px / 120px;;
-	background-color: #fafafa;
+	background-color: grey;
 }
 
 #songs-container{
-	--player-width: 600px;
+/*	--player-width: 600px;
 	--player-height: 250px;
 	margin: 0 auto;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
 	width:var(--player-width);
 	max-height: var(--player-height);
 	border-radius:120px / 120px;;
-	background-color: #fafafa;
+	background-color: #fafafa;*/
 }
 
 #player-img-container .plasylist-container{
@@ -55,7 +55,21 @@ audio{
 	width: 250px;
 }
 
-#songs-titles{
+#controls-songs-container{
+	height: 50%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+#songs-container{
+	max-height: 50%;
+	overflow-y: scroll;
+	/*list-style:none;*/
+    padding-left:0;
+}
+
+/*#songs-titles{
 	margin:  0 auto;
 	width:600px;
 	max-height: 250px;
@@ -65,7 +79,7 @@ audio{
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-}
+}*/
 
 .song-container button{
 	background-color: transparent;
@@ -76,7 +90,7 @@ audio{
 	outline: none
 }
 
-
+/*
 
 
 
@@ -226,3 +240,4 @@ audio{
 		margin-bottom: 20px;
 		font-size: x-large;
 	}
+*/
