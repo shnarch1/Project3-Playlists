@@ -74,10 +74,12 @@
 		transform: rotate(45deg);
 	}
 
-	.input-err:focus{
-		outline-color: red;
+	.input-err, .input-err:focus{
+		border:2px solid red;
+		outline: transparent;
 	}
 
-	.input-valid:focus{
-		outline-color: green;
+	.input-valid, .input-valid:focus{
+		border:2px solid #2ECC40;
+		outline: transparent;
 	}

@@ -20,15 +20,23 @@ class Playlist {
 		var del_edit_btns_container = $("<div>", {class: "del-edit-btns-container"})
 									.appendTo(pl_img_container);
 
-		var del_btn = $("<div>", {class: "del-btn", click: (e) => {this.delete(e)}})
-									.append($("<button>")
-										.append($("<sapn>", {class: "glyphicon glyphicon-remove"})))
-									.appendTo(del_edit_btns_container);
+		// var del_btn = $("<div>", {class: "del-btn", click: (e) => {this.delete(e)}})
+		// 							.append($("<button>")
+		// 								.append($("<sapn>", {class: "glyphicon glyphicon-remove"})))
+		// 							.appendTo(del_edit_btns_container);
 
-		var edit_btn = $("<div>", {class: "edit-btn", click: (e) => {this.edit(e)}})
-									.append($("<button>")
-										.append($("<sapn>", {class: "glyphicon glyphicon-pencil"})))
-									.appendTo(del_edit_btns_container);
+
+		var del_btn = $("<button>", {class: "del-btn glyphicon glyphicon-remove",
+									 click: (e) => {this.delete(e)}})
+									 .appendTo(del_edit_btns_container);
+
+		// var edit_btn = $("<div>", {class: "edit-btn", click: (e) => {this.edit(e)}})
+		// 							.append($("<button>")
+		// 								.append($("<sapn>", {class: "glyphicon glyphicon-pencil"})))
+		// 							.appendTo(del_edit_btns_container);
+		var edit_btn = $("<button>", {class: "edit-btn glyphicon glyphicon-pencil",
+									 click: (e) => {this.edit(e)}})
+									 .appendTo(del_edit_btns_container);
 
 		var pl_circle = $("<div>", {class:"circle"}).appendTo(pl_img_container);
 
@@ -159,11 +167,6 @@ class Playlist {
 			edit_pl_popup.build();
 		})
 
-		// var route = "http://localhost/playlist/api/playlist/" + pl_id; 
-		// fetch(route).then((response)=>{return response.json()}).then((d)=>{console.dir(d);})
-
-		// var pop = new editPlaylistPopup(null, 'add-new-pl', pl_id, "avi", "avi", [{'name': 'name_avi', 'url': 'avi_url'}]);
-		// pop.build();
 	}
 
 	_play(e){

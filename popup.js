@@ -68,6 +68,7 @@ class newPlaylistPopup extends BasePopup{
 	constructor(url, class_name){
 		super(url, class_name);
 		this.playlist = new Playlist();
+		this.img_is_valid = false;
 	}
 
 	build(){
@@ -167,13 +168,11 @@ class newPlaylistPopup extends BasePopup{
 
 	_create_image_preview(img_url){
 		
-		console.dir("avi");
 		$(".image-preview-container").empty();
 		$("<img>", {src: img_url}).appendTo($(".image-preview-container"));
 	}
 
 	_create_image_preview_template(){
-		console.dir("erorr");
 		$(".image-preview-container").empty();
 		$("<div>", {class:"image-preview-template"})
 						.appendTo(".image-preview-container")
@@ -186,11 +185,13 @@ class newPlaylistPopup extends BasePopup{
 		return new Promise((resolve, reject) => {
 			var img = $("<img>", {src: url});
 			$(img).on("load", () => {
+				this.img_is_valid = true;
 				console.dir("loaded");
 				resolve(url);
 			})
 
 			$(img).on("error", () => {
+				this.img_is_valid = false;
 				console.dir("rejected");
 				reject();
 			})
@@ -199,9 +200,28 @@ class newPlaylistPopup extends BasePopup{
 
 	_next(e){
 		e.preventDefault();
-		this.playlist.name = this.popup_main.find('#pl-name').val();
-		this.playlist.img_url = this.popup_main.find('#pl-url').val();
-		this._build_add_plsylist_songs();
+		var name_input = this.popup_main.find('#pl-name');
+		var url_input = this.popup_main.find('#pl-url');
+		this.playlist.name = name_input.val();
+		this.playlist.img_url = url_input.val();
+		
+		if ( this.playlist.name != "" && this.playlist.img_url != "" && this.img_is_valid == true){
+			this._build_add_plsylist_songs();
+		}
+		else{
+			if (this.playlist.name == ""){
+				name_input.removeClass();
+				name_input.addClass('input-err');
+			}	
+			if(this.playlist.img_url == ""){
+				url_input.removeClass();
+				url_input.addClass('input-err');
+			}
+			if (!this.img_is_valid){
+				$("<p>", {text: "Image does not exist!"})
+						.appendTo('form > div');
+			}
+		}
 	}
 
 	_build_add_plsylist_songs(){
@@ -351,9 +371,9 @@ class editPlaylistPopup extends newPlaylistPopup{
 		 				 value:"Reset Fields"})
 						.appendTo(buttons);
 
-		var image_preview = $("<div>", {class:"image-preview"})
-						.appendTo(content)
-						.append($("<span>", {text: "Preview"}));
+		var image_preview = $("<div>", {class:"image-preview-container"})
+						.append($("<img>", {src: this.playlist.img_url}))
+						.appendTo(content);
 	}
 
 	_next(e){
@@ -479,52 +499,52 @@ class editPlaylistPopup extends newPlaylistPopup{
 
 }
 
-class playerPopup extends BasePopup{
-	constructor(url, class_name){
-		super(url, class_name);
-		this.playlist = new playerPlaylist();
-	}
+// class playerPopup extends BasePopup{
+// 	constructor(url, class_name){
+// 		super(url, class_name);
+// 		this.playlist = new playerPlaylist();
+// 	}
 
-	build(pl){
-		this._build_popup_container();
-		this._build_player(pl);
-	}
+// 	build(pl){
+// 		this._build_popup_container();
+// 		this._build_player(pl);
+// 	}
 
-	_build_popup_container(){
-		super._build_popup_container();
-		this.popup_container.attr("id", "player-popup-container")
-		this.popup_main.removeClass();
-		this.popup_main.attr("id","player-main");
-		// this.songs_container = $("<div>", {id: "songs-container"})
-								// .appendTo(this.popup_container);
-	}
+// 	_build_popup_container(){
+// 		super._build_popup_container();
+// 		this.popup_container.attr("id", "player-popup-container")
+// 		this.popup_main.removeClass();
+// 		this.popup_main.attr("id","player-main");
+// 		// this.songs_container = $("<div>", {id: "songs-container"})
+// 								// .appendTo(this.popup_container);
+// 	}
 
-	_build_player(pl){ 
-		var img_container = $("<div>", {id: "player-img-container"})
-								.appendTo(this.popup_main);
-		this.playlist.img_url = pl.img_url;
-		this.playlist.build(null, "#player-img-container");
-		var controls_and_songs_container = $("<div>", {id: "controls-songs-container"})
-								.appendTo(this.popup_main)
-		var controls = $("<audio>", {controls: true})
-								.appendTo(controls_and_songs_container);
+// 	_build_player(pl){ 
+// 		var img_container = $("<div>", {id: "player-img-container"})
+// 								.appendTo(this.popup_main);
+// 		this.playlist.img_url = pl.img_url;
+// 		this.playlist.build(null, "#player-img-container");
+// 		var controls_and_songs_container = $("<div>", {id: "controls-songs-container"})
+// 								.appendTo(this.popup_main)
+// 		var controls = $("<audio>", {controls: true})
+// 								.appendTo(controls_and_songs_container);
 
-		var now_playing = $("<span>", {id: "now-playing", text:"Now Playing: " + pl.name})
-								.appendTo(controls_and_songs_container);
+// 		var now_playing = $("<span>", {id: "now-playing", text:"Now Playing: " + pl.name})
+// 								.appendTo(controls_and_songs_container);
 
-		var songs_container = $("<ol>", {id: "songs-container"})
-								.appendTo(controls_and_songs_container);
-		$(pl.songs).each((index, el) => {
-			$("<source>", {src: el.url, type:"audio/mp3"}).appendTo(controls);
-			this._build_song(el.name).appendTo('#songs-container')
-		});
-	}
+// 		var songs_container = $("<ol>", {id: "songs-container"})
+// 								.appendTo(controls_and_songs_container);
+// 		$(pl.songs).each((index, el) => {
+// 			$("<source>", {src: el.url, type:"audio/mp3"}).appendTo(controls);
+// 			this._build_song(el.name).appendTo('#songs-container')
+// 		});
+// 	}
 
-	_build_song(name){
-		var song_container = $("<li>", {class: "song-container", text: name});	
-		return song_container;
-	}
-}
+// 	_build_song(name){
+// 		var song_container = $("<li>", {class: "song-container", text: name});	
+// 		return song_container;
+// 	}
+// }
 
 // test = new BasePopup('new_pl.html', 'add-new-pl');
 // test.build();

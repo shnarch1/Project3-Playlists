@@ -58,7 +58,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		flex-direction: row;
-		justify-content: space-around;
+		justify-content: center;
 	}
 
 	.plasylist-container{
@@ -94,36 +94,24 @@
 	}
 
 
-	.del-edit-btns-container{
+.del-edit-btns-container{
 		visibility: hidden;
 		position: absolute;
 		top: 10px;
 		left: 88px;
 		display: flex;
 		flex-direction: row;
-		justify-content: center;
+		justify-content: space-between;
 		width: 30%;
 	}
 
-	.del-btn{
-		margin-right: 5px;
-	}
-
-	.del-edit-btns-container .del-btn, .del-edit-btns-container .edit-btn{
-		position: relative;
-		width:calc(var(--circle-w) / 2);
-		height:calc(var(--circle-h) / 2);
-		background-color: white;
-		border-radius: 50%;
-	}
-
 	.del-edit-btns-container button{
-		position: absolute;
-		top: 2px;
-		left: -2px;
-		font-size: large;
-		background-color: transparent;
+		background-color: white;
 		border: none;
+		border-radius: 50%;
+		height: 30px;
+		width: 30px;
+		font-size: large;
 	}
 
 	.del-edit-btns-container button:focus{

@@ -133,6 +133,21 @@ audio{
 	opacity: 1;
 }
 
+#del-edit-btns{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+#del-edit-btns button{
+	outline: none;
+	border: none;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	font-size: large;
+}
+
 /*#songs-titles{
 	margin:  0 auto;
 	width:600px;

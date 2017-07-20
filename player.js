@@ -35,6 +35,15 @@ class Player{
 			this._build_song(el.name, index).appendTo('#songs-container')
 		});
 
+		var del_edit_btns = $("<div>", {id: "del-edit-btns"})
+							.append($("<button>", {id:"edit-btn",
+												   class: "glyphicon glyphicon-pencil",
+												   click: (e) => {this._edit_playlist(e)}}))
+							.append($("<button>", {id:"del-btn",
+												   class: "glyphicon glyphicon-remove",
+												   click: (e) => {this._del_playlist(e)}}))
+							.appendTo(this.container_name);
+
 		$(controls).on("playing", (e) => {
 			var song_container
 			$(this.playlist.songs).each((index, el) =>{
@@ -107,5 +116,17 @@ class Player{
 
 		});
 		return index;
+	}
+
+	_del_playlist(e){
+		Playlist.delete_playlist(this.playlist.id)
+		.then(() => {
+			$(this.container_name).empty();
+			Playlist.buildAll();
+		});
+	}
+
+	_edit_playlist(e){
+		console.dir(e);
 	}
 }
