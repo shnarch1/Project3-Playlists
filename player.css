@@ -13,7 +13,7 @@
 	counter-reset: song-num;
 	--player-width: 600px;
 	--player-height: 250px;
-	margin: 0 auto;
+	/*margin: 0 auto;*/
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;

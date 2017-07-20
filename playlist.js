@@ -51,12 +51,12 @@ class Playlist {
 	}
 
 	static buildAll(){
-		$('#main-container').empty();
+		$('#playlists').empty();
 		fetch("api/playlist").then((response)=>{return response.json()})
 				 .then(function(data){
 				 	for(var i=0; i<data.data.length; i++){
 				 		var playlist = new Playlist(null, data.data[i].name, data.data[i].image, data.data[i].songs);
-				 		playlist.build(data.data[i].id, '#main-container');
+				 		playlist.build(data.data[i].id, '#playlists');
 				 	}					 	
 				 })
 	}

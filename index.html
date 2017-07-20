@@ -15,6 +15,10 @@
 	#menu{
 		background-color: #001f3f;
 		border-top: 3px solid #0074D9 ;
+		position: fixed;
+		width:100%;
+		top: 0;
+		z-index: 1000;
 	}
 
 	#menu-container{
@@ -57,8 +61,18 @@
 		margin-top: 20px;
 		display: flex;
 		flex-wrap: wrap;
-		flex-direction: row;
+		flex-direction: center;
 		justify-content: center;
+		margin-top: 100px;
+	}
+
+	#playlists{
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		justify-content: space-between;
+
 	}
 
 	.plasylist-container{
@@ -201,28 +215,30 @@
 		</div>
 	</header>
 	<div id="main-container">
-		<div class="plasylist-container">
-			<div class="curved-header">
-				Playlist Header
-			</div>
-			<div class="pl-img-container">
-				<img src="http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg">
-				<div class="del-edit-btns-container">
-					<div class="del-btn">
-						<button>
-							<span class="glyphicon glyphicon-remove"></span>
-						</button>
-					</div>
-					<div class="edit-btn">
-						<button>
-							<span class="glyphicon glyphicon-pencil"></span>
-						</button>
-					</div>
+		<div id="playlists">
+			<div class="plasylist-container">
+				<div class="curved-header">
+					Playlist Header
 				</div>
-				<div class="circle">
-					<button class="play-pl">
-						<span class="glyphicon glyphicon-play"></span>
-					</button>
+				<div class="pl-img-container">
+					<img src="http://idanraichelproject.com/wp-content/uploads/2015/12/Front-Within-My-Walls.jpg">
+					<div class="del-edit-btns-container">
+						<div class="del-btn">
+							<button>
+								<span class="glyphicon glyphicon-remove"></span>
+							</button>
+						</div>
+						<div class="edit-btn">
+							<button>
+								<span class="glyphicon glyphicon-pencil"></span>
+							</button>
+						</div>
+					</div>
+					<div class="circle">
+						<button class="play-pl">
+							<span class="glyphicon glyphicon-play"></span>
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
