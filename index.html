@@ -62,11 +62,11 @@
 	}
 
 	.plasylist-container{
-		--pl-container-w:300px;
-		--pl-img-w: 300px;
-		--pl-img-h: 300px;
-		--circle-w: 50px;
-		--circle-h: 50px;
+		--pl-container-w:250px;
+		--pl-img-w: var(--pl-container-w);
+		--pl-img-h: var(--pl-container-w);
+		--circle-w: calc(var(--pl-img-w) / 6);
+		--circle-h: calc(var(--pl-img-h) / 6);
 		display: flex;
 		font: 26px Monaco, MonoSpace;
 		flex-direction: column;
@@ -98,7 +98,7 @@
 		visibility: hidden;
 		position: absolute;
 		top: 10px;
-		left: 105px;
+		left: 88px;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
@@ -132,6 +132,9 @@
 
 	.circle{
 		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		position: absolute;
 		width: var(--circle-w);
 		height: var(--circle-h);
@@ -142,14 +145,14 @@
 		z-index: 100;
 	}
 
-/*	.circle .play-pl{
+	.circle .play-pl{
 		position: absolute;
-		left: 8px;
-		top: 10px;
+		left: 9px;
+		top: 3px;
 		visibility: hidden;
 		background-color: transparent;
 		border: none;
-	}*/
+	}
 
 	.circle .play-pl:focus{
 		outline: none;
@@ -247,6 +250,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="playlist.js"></script>
 <script src="popup.js"></script>
+<script src="player.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

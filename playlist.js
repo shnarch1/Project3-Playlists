@@ -32,10 +32,13 @@ class Playlist {
 
 		var pl_circle = $("<div>", {class:"circle"}).appendTo(pl_img_container);
 
-		var play_btn = $("<button>", {class: "play-pl", click: (e) => {this._play(e)}})
-									.append($("<span>", {class: "glyphicon glyphicon-play"}))
-									.appendTo(pl_circle);
+		// var play_btn = $("<button>", {class: "play-pl", click: (e) => {this._play(e)}})
+		// 							.append($("<span>", {class: "glyphicon glyphicon-play"}))
+		// 							.appendTo(pl_circle);
 		
+		var play_btn = $("<button>", {class: "play-pl", text: "\u25B6", click: (e) => {this._play(e)}})
+									.appendTo(pl_circle);
+
 		pl_container.appendTo(container_name);
 	}
 
@@ -104,7 +107,7 @@ class Playlist {
 			promises.push(pl);
 			promises.push(songs);
 
-			var pl = new Playlist();
+			var pl = new playerPlaylist();
 
 
 			Promise.all(promises).then((data) => {
@@ -167,10 +170,8 @@ class Playlist {
 		var pl_id = e.target.closest(".plasylist-container").dataset.id;
 		Playlist.get_playlist(pl_id)
 		.then((pl) => {
-			console.log("before create player");
-			console.dir(pl)
-			var player = new playerPopup();
-			player.build(pl);
+			var player = new Player(pl);
+			player.build();
 		})
 	}
 
@@ -182,19 +183,17 @@ class playerPlaylist extends Playlist{
 	}
 
 	build(id, container_name){
-		var pl_container = $("<div>", {class:"plasylist-container",
+		var pl_container = $("<div>", {class:"player-plasylist-container",
 									   "data-id":id});
-		var pl_header = $("<div>", {class:"curved-header",
-									text:this.name})
-									.appendTo(pl_container);
+		
 		var pl_img_container = $("<div>", {class:"pl-img-container"})
 									.appendTo(pl_container);
 		var pl_img = $("<img>", {src:this.img_url}).appendTo(pl_img_container);
 
-		var pl_circle = $("<div>", {class:"circle"}).appendTo(pl_img_container);
+		var pl_circle = $("<div>", {class:"circle glyphicon glyphicon-play"}).appendTo(pl_img_container);
 
-		var play_btn = $("<button>", {class: "play-pl glyphicon glyphicon-play"})
-									.appendTo(pl_circle);
+		// var play_btn = $("<button>", {class: "play-pl glyphicon glyphicon-play"})
+									// .appendTo(pl_circle);
 		
 		pl_container.appendTo(container_name);
 	}
