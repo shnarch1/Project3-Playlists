@@ -53,13 +53,22 @@ class BasePopup{
 	}
 
 	static isImgUrlValid(user_input) {
-    var pattern = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$";
-    var url = new RegExp(pattern,"i");
-    if (url.test(user_input)) {
-        return true;
-    }
-    return false;
-}
+    	var pattern = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.?)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.?[a-z]{2,6}(/[-\\w@\\+\\.?~#\\?&/=%]*)?$";
+    	var url = new RegExp(pattern,"i");
+    	if (url.test(user_input)) {
+        	return true;
+    	}
+    	return false;
+	}
+
+	static isNameValid(user_input){
+		var pattern = "^([a-zA-Z0-9_-\\s]){1,15}$";
+		var name = new RegExp(pattern,"i");
+		if (name.test(user_input)) {
+        	return true;
+    	}
+    	return false;
+	}
 
 	
 }
@@ -68,7 +77,6 @@ class newPlaylistPopup extends BasePopup{
 	constructor(url, class_name){
 		super(url, class_name);
 		this.playlist = new Playlist();
-		this.img_is_valid = false;
 	}
 
 	build(){
@@ -96,6 +104,8 @@ class newPlaylistPopup extends BasePopup{
 						 placeholder: "e.g Blood Sugar Sex Magic"})
 						.appendTo(name_label);
 		name_input.focus();
+
+		$(name_input).on('input', (e) => {this._check_name(e)});
 
 		var url_label = $("<label>", {text: "Playlist URL"})
 						.appendTo(inputs);
@@ -141,24 +151,36 @@ class newPlaylistPopup extends BasePopup{
 	// 	}}).appendTo($(".image-preview-container"));
 	// }
 
+	_check_name(e){
+		var name = e.target.value;
+		if (!BasePopup.isNameValid(name)){
+			$(e.target).addClass('input-err')
+			this.name_is_valid = false;
+		}
+		else{
+			$(e.target).removeClass('input-err')
+			this.name_is_valid = true;
+		}
+	}
+
 	_update_preview(e){
 		var img_url = e.target.value;
 		
-		if( img_url == "" ){
-			$(e.target).removeClass();
-		}
+		// if( img_url == "" ){
+		// 	$(e.target).removeClass('input-err');
+		// }
 
-		else if(BasePopup.isImgUrlValid(img_url)){
+		if(BasePopup.isImgUrlValid(img_url)){
 			// $(e.target).css("outline-color", "initial");
-			$(e.target).addClass('input-valid');
+			$(e.target).removeClass('input-err');
 			this._check_image_url(img_url)
 			.then(this._create_image_preview, this._create_image_preview_template);
 		}
 
 		else{
+			this.img_is_valid = false;
 			$(e.target).removeClass();
 			$(e.target).addClass('input-err');
-			// $(e.target).css("outline-color", "#FF4136");
 			this._create_image_preview_template();
 			console.log("URL is not valid");
 		}
@@ -178,8 +200,6 @@ class newPlaylistPopup extends BasePopup{
 						.appendTo(".image-preview-container")
 						.append($("<span>", {text: "Preview"}));
 	}
-
-
 
 	_check_image_url(url){
 		return new Promise((resolve, reject) => {
@@ -205,23 +225,48 @@ class newPlaylistPopup extends BasePopup{
 		this.playlist.name = name_input.val();
 		this.playlist.img_url = url_input.val();
 		
-		if ( this.playlist.name != "" && this.playlist.img_url != "" && this.img_is_valid == true){
+		if(this.name_is_valid && this.img_is_valid){
 			this._build_add_plsylist_songs();
 		}
 		else{
-			if (this.playlist.name == ""){
-				name_input.removeClass();
+			if (!this.name_is_valid){
 				name_input.addClass('input-err');
-			}	
-			if(this.playlist.img_url == ""){
-				url_input.removeClass();
+			}
+			if (!this.url_is_valid){
 				url_input.addClass('input-err');
 			}
-			if (!this.img_is_valid){
-				$("<p>", {text: "Image does not exist!"})
-						.appendTo('form > div');
-			}
-		}
+		} 
+			
+
+		// if ( BasePopup.isNameValid(this.playlist.name) &&
+		// 	 BasePopup.isImgUrlValid(this.playlist.img_url) &&
+		// 	 this.img_is_valid == true){
+		// 		this._build_add_plsylist_songs();
+		// }
+		// else{
+		// 	if (!BasePopup.isNameValid(this.playlist.name)){
+		// 		name_input.removeClass();
+		// 		name_input.addClass('input-err');
+		// 	}
+		// 	else{
+		// 		name_input.removeClass('input-err');
+		// 	}	
+		// 	if(!BasePopup.isImgUrlValid(this.playlist.img_url)){
+		// 		url_input.removeClass();
+		// 		url_input.addClass('input-err');
+		// 	}
+		// 	else{
+		// 		url_input.addClass('input-err');
+		// 	}
+		// 	if (!this.img_is_valid){
+		// 		url_input.addClass('input-err');
+		// 		if(!this.popup_container.find("#err-msg").length){
+		// 			$("<p>", {id: "err-msg", text: "Image does not exist!"})
+		// 				.appendTo('form > div:first-child');
+		// 		}
+				
+		// 	}
+		// }
 	}
 
 	_build_add_plsylist_songs(){
