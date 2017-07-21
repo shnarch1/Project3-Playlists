@@ -52,8 +52,17 @@ class BasePopup{
 		.then((content)=>{this.popup_main.append(content)})
 	}
 
+	static isSongUrlValid(user_input) {
+    	var pattern = "^(https?://)(www\\.)?([-a-z0-9]{1,63}\\.?)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.?[a-z]{2,6}(/[-\\w@\\+\\.?~#\\?&/=%]*)?.mp3$";
+    	var url = new RegExp(pattern,"i");
+    	if (url.test(user_input)) {
+        	return true;
+    	}
+    	return false;
+	}
+
 	static isImgUrlValid(user_input) {
-    	var pattern = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.?)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.?[a-z]{2,6}(/[-\\w@\\+\\.?~#\\?&/=%]*)?$";
+    	var pattern = "^(https?://)(www\\.)?([-a-z0-9]{1,63}\\.?)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.?[a-z]{2,6}(/[-\\w@\\+\\.?~#\\?&/=%]*)?$";
     	var url = new RegExp(pattern,"i");
     	if (url.test(user_input)) {
         	return true;
@@ -282,11 +291,14 @@ class newPlaylistPopup extends BasePopup{
 		var new_songs_inputs = $("<div>", {id: "new-songs-inputs"})
 						.appendTo(form);
 
-		var new_song = $("<div>", {class: "new-song"})
-						.append($("<label>", {text: "Song URL"})
-									.append($("<input>", {type: "text", name:"song-url"})))
-						.append($("<label>", {text: "Name:"})
-									.append($("<input>", {type: "text", name:"song-name"})));
+		// var new_song = $("<div>", {class: "new-song"})
+		// 				.append($("<label>", {text: "Song URL"})
+		// 							.append($("<input>", {class:"song-url-input", type: "text", name:"song-url"})))
+		// 				.append($("<label>", {text: "Name:", class:"song-name-input"})
+		// 							.append($("<input>", {type: "text", name:"song-name"})));
+
+		// $(".song-url-input").on('input', (e) => {console.dir(e);});
+		// $(new_song).find(".song-url-input").on('input', (e) => {console.dir(e);});
 
 		var buttons = $("<div>", {id: "buttons"}).appendTo(form);
 
@@ -307,10 +319,34 @@ class newPlaylistPopup extends BasePopup{
 
 		var new_song = $("<div>", {class: "new-song"})
 						.append($("<label>", {text: "Song URL"})
-									.append($("<input>", {type: "text", name:"song-url"})))
+									.append($("<input>", {class:"song-url-input", type: "text", name:"song-url"})))
 						.append($("<label>", {text: "Name:"})
-									.append($("<input>", {type: "text", name:"song-name"})));
+									.append($("<input>", {class:"song-name-input", type: "text", name:"song-name"})));
+		
+		new_song.find(".song-url-input").on('input', (e) => {this._check_song_url(e)});
+		new_song.find(".song-name-input").on('input', (e) => {this._check_song_name(e)});
+		
 		new_song.appendTo(this.popup_main.find("#new-songs-inputs"));
+	}
+
+	_check_song_name(e){
+		var name = e.target.value;
+		if (!BasePopup.isNameValid(name)){
+			$(e.target).addClass('input-err')
+		}
+		else{
+			$(e.target).removeClass('input-err')
+		}
+	}
+
+	_check_song_url(e){
+		var url = e.target.value;
+			if (!BasePopup.isSongUrlValid(url)){
+				$(e.target).addClass('input-err')
+			}
+			else{
+				$(e.target).removeClass('input-err')
+			}
 	}
 
 	_finish_and_save(e){
