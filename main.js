@@ -19,7 +19,7 @@
  	console.dir(search_text);
  	$('#main-container .plasylist-container').each((index, el)=>{
  		var pl_header = $(el).find(".curved-header").text();
- 		if(!pl_header.includes(search_text)){
+ 		if(!pl_header.toLowerCase().includes(search_text.toLowerCase())){
  			$(el).hide();
  		}
  		else{

@@ -7,9 +7,10 @@ class Playlist {
 		this.songs = songs;
 	}
 
-	build(id, container_name){
+	build(id, container_name, tabindex){
 		var pl_container = $("<div>", {class:"plasylist-container",
-									   "data-id":id});
+									   "data-id":id,
+										tabindex: tabindex});
 		var pl_header = $("<div>", {class:"curved-header",
 									text:this.name})
 									.appendTo(pl_container);
@@ -20,29 +21,16 @@ class Playlist {
 		var del_edit_btns_container = $("<div>", {class: "del-edit-btns-container"})
 									.appendTo(pl_img_container);
 
-		// var del_btn = $("<div>", {class: "del-btn", click: (e) => {this.delete(e)}})
-		// 							.append($("<button>")
-		// 								.append($("<sapn>", {class: "glyphicon glyphicon-remove"})))
-		// 							.appendTo(del_edit_btns_container);
-
 
 		var del_btn = $("<button>", {class: "del-btn glyphicon glyphicon-remove",
 									 click: (e) => {this.delete(e)}})
 									 .appendTo(del_edit_btns_container);
 
-		// var edit_btn = $("<div>", {class: "edit-btn", click: (e) => {this.edit(e)}})
-		// 							.append($("<button>")
-		// 								.append($("<sapn>", {class: "glyphicon glyphicon-pencil"})))
-		// 							.appendTo(del_edit_btns_container);
 		var edit_btn = $("<button>", {class: "edit-btn glyphicon glyphicon-pencil",
 									 click: (e) => {this.edit(e)}})
 									 .appendTo(del_edit_btns_container);
 
 		var pl_circle = $("<div>", {class:"circle"}).appendTo(pl_img_container);
-
-		// var play_btn = $("<button>", {class: "play-pl", click: (e) => {this._play(e)}})
-		// 							.append($("<span>", {class: "glyphicon glyphicon-play"}))
-		// 							.appendTo(pl_circle);
 		
 		var play_btn = $("<button>", {class: "play-pl", text: "\u25B6", click: (e) => {this._play(e)}})
 									.appendTo(pl_circle);
@@ -52,13 +40,16 @@ class Playlist {
 
 	static buildAll(){
 		$('#playlists').empty();
+		var tabindex = 3;
 		fetch("api/playlist").then((response)=>{return response.json()})
 				 .then(function(data){
 				 	for(var i=0; i<data.data.length; i++){
 				 		var playlist = new Playlist(null, data.data[i].name, data.data[i].image, data.data[i].songs);
-				 		playlist.build(data.data[i].id, '#playlists');
+				 		playlist.build(data.data[i].id, '#playlists', tabindex);
+				 		tabindex++;
 				 	}					 	
 				 })
+
 	}
 
 	delete(e){
@@ -66,8 +57,6 @@ class Playlist {
 		var pl_id = pl_container.dataset.id;
 		Playlist.delete_playlist(pl_id)
 		.then(() => {$(pl_container).remove()});
-		// .then((res => {return res.json()}))
-		// .then((status) => {console.dir(d);});
 	}
 
 	static delete_playlist(id){
@@ -195,9 +184,6 @@ class playerPlaylist extends Playlist{
 
 		var pl_circle = $("<div>", {class:"circle glyphicon glyphicon-play"}).appendTo(pl_img_container);
 
-		// var play_btn = $("<button>", {class: "play-pl glyphicon glyphicon-play"})
-									// .appendTo(pl_circle);
-		
 		pl_container.appendTo(container_name);
 	}
 }

@@ -1,5 +1,5 @@
 class Player{
-	constructor(playlist, container_name = "#main-container"){
+	constructor(playlist, container_name = "#player"){
 		this.container_name = container_name;
 		this.playlist = playlist;
 		this.song_containers_list = [];
@@ -58,15 +58,15 @@ class Player{
 			this.img_container.find('img').removeClass('pause-playlist-rotate')
 			this.img_container.find('img').addClass('rotate-playlist')
 
-			$('.circle').removeClass('glyphicon glyphicon-play');
-			$('.circle').addClass('glyphicon glyphicon-pause');
+			$('#player-container .circle').removeClass('glyphicon glyphicon-play');
+			$('#player-container .circle').addClass('glyphicon glyphicon-pause');
 		})
 
 		$(controls).on("pause", (e) => {
 			this.img_container.find('img').addClass('pause-playlist-rotate');
 
-			$('.circle').removeClass('glyphicon glyphicon-pause');
-			$('.circle').addClass('glyphicon glyphicon-play');
+			$('#player-container .circle').removeClass('glyphicon glyphicon-pause');
+			$('#player-container .circle').addClass('glyphicon glyphicon-play');
 
 		})
 
@@ -127,6 +127,8 @@ class Player{
 	}
 
 	_edit_playlist(e){
-		console.dir(e);
+		var edit_pl_popup = new editPlaylistPopup(null,'add-new-pl',
+												this.playlist.id, this.playlist.name, this.playlist.img_url, this.playlist.songs);
+			edit_pl_popup.build();
 	}
 }
