@@ -86,6 +86,8 @@ class newPlaylistPopup extends BasePopup{
 	constructor(url, class_name){
 		super(url, class_name);
 		this.playlist = new Playlist();
+		this.name_is_valid = false;
+		this.url_is_valid = false;
 	}
 
 	build(){
@@ -101,6 +103,13 @@ class newPlaylistPopup extends BasePopup{
 						.appendTo(this.popup_main);
 
 		var form = $("<form>").appendTo(content);
+
+		$(form).on('reset', (e) => { $('#popup-main').find('input').each((index, el) => {
+				if($(el).hasClass('input-err')){
+					$(el).removeClass('input-err')
+				}			
+			});
+		})
 
 		var inputs = $("<div>").appendTo(form);
 
@@ -174,20 +183,16 @@ class newPlaylistPopup extends BasePopup{
 
 	_update_preview(e){
 		var img_url = e.target.value;
-		
-		// if( img_url == "" ){
-		// 	$(e.target).removeClass('input-err');
-		// }
 
 		if(BasePopup.isImgUrlValid(img_url)){
-			// $(e.target).css("outline-color", "initial");
+			this.url_is_valid = true;
 			$(e.target).removeClass('input-err');
 			this._check_image_url(img_url)
 			.then(this._create_image_preview, this._create_image_preview_template);
 		}
 
 		else{
-			this.img_is_valid = false;
+			this.url_is_valid = false;
 			$(e.target).removeClass();
 			$(e.target).addClass('input-err');
 			this._create_image_preview_template();
@@ -241,7 +246,7 @@ class newPlaylistPopup extends BasePopup{
 			if (!this.name_is_valid){
 				name_input.addClass('input-err');
 			}
-			if (!this.url_is_valid){
+			if (!this.img_is_valid){
 				url_input.addClass('input-err');
 			}
 		} 
@@ -332,62 +337,90 @@ class newPlaylistPopup extends BasePopup{
 	_check_song_name(e){
 		var name = e.target.value;
 		if (!BasePopup.isNameValid(name)){
-			$(e.target).addClass('input-err')
+			if (!$(e.target).hasClass('input-err')){
+				$(e.target).addClass('input-err');			
+			}
+			return false;
 		}
 		else{
-			$(e.target).removeClass('input-err')
+			if ($(e.target).hasClass('input-err')){
+				$(e.target).removeClass('input-err')
+			}
+			return true;
 		}
 	}
 
 	_check_song_url(e){
 		var url = e.target.value;
-			if (!BasePopup.isSongUrlValid(url)){
-				$(e.target).addClass('input-err')
+		if (!BasePopup.isSongUrlValid(url)){
+			if (!$(e.target).hasClass('input-err')){
+				$(e.target).addClass('input-err');			
 			}
-			else{
+			return false;
+		}
+		else{
+			if ($(e.target).hasClass('input-err')){
 				$(e.target).removeClass('input-err')
 			}
+			return true;
+		}
 	}
 
 	_finish_and_save(e){
 		e.preventDefault();
 		var songs  = [];
+		var all_inputs_are_valid = true;
 		$(".add-pl-songs").find(".new-song").each(function(index, el) {
 			var inputs = $(el).find('input');
 			var song_url = $(inputs[0]).val(); 
-			var song_name = $(inputs[1]).val(); 
+			var song_name = $(inputs[1]).val();
+
+			all_inputs_are_valid = all_inputs_are_valid && BasePopup.isNameValid(song_name) && BasePopup.isSongUrlValid(song_url);
+			
 			if(song_url != "" && song_name !=""){
 				songs.push({"name": song_name, "url": song_url});
 			}
+			else{
+				if (song_url == ""){
+					console.dir($(el));
+					$(el).find(".song-url-input").addClass('input-err');
+				}
+				if (song_name == ""){
+					$(el).find(".song-name-input").addClass('input-err');
+				}
+			}
 			
 		});
-		this.playlist.songs = songs;
 		
-		var formData = new FormData();
-		formData.append("name", this.playlist.name);
-		formData.append("image", this.playlist.img_url);
-		for(var i = 0; i < this.playlist.songs.length; i++){
-			formData.append("songs[" + i + "][name]",  this.playlist.songs[i].name);
-			formData.append("songs[" + i + "][url]",  this.playlist.songs[i].url);
-		}
+		if(all_inputs_are_valid){
+			this.playlist.songs = songs;
 		
+			var formData = new FormData();
+			formData.append("name", this.playlist.name);
+			formData.append("image", this.playlist.img_url);
+			for(var i = 0; i < this.playlist.songs.length; i++){
+				formData.append("songs[" + i + "][name]",  this.playlist.songs[i].name);
+				formData.append("songs[" + i + "][url]",  this.playlist.songs[i].url);
+			}
+			
 
-		var myInit = {method: 'POST',
-    				  body:formData
-    				}
-		fetch('http://localhost/playlist/api/playlist', myInit)
-		.then((response)=>{return new Promise((resolve, reject)=>{
-			if(response.status == 200){
-				resolve(response.status);
-			}
-			else{
-				reject(response.status);
-			}
-		})})
-		.then((data)=>{this._remove(); Playlist.buildAll()})
-		.catch((e)=> {$(this.popup_main)
-						.append($("<p>", {class: "err-msg",
-										  text:e + ": An error occurred. Please try again later."}))});
+			var myInit = {method: 'POST',
+	    				  body:formData
+	    				}
+			fetch('http://localhost/playlist/api/playlist', myInit)
+			.then((response)=>{return new Promise((resolve, reject)=>{
+				if(response.status == 200){
+					resolve(response.status);
+				}
+				else{
+					reject(response.status);
+				}
+			})})
+			.then((data)=>{this._remove(); Playlist.buildAll()})
+			.catch((e)=> {$(this.popup_main)
+							.append($("<p>", {class: "err-msg",
+											  text:e + ": An error occurred. Please try again later."}))});
+		}
 	}
 
 }
