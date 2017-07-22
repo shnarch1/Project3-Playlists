@@ -83,9 +83,9 @@ class BasePopup{
 }
 
 class newPlaylistPopup extends BasePopup{
-	constructor(url, class_name){
+	constructor(url, class_name, pl_id=null, pl_name=null, pl_img_url=null, pl_songs=null){
 		super(url, class_name);
-		this.playlist = new Playlist();
+		this.playlist = new Playlist(pl_id, pl_name, pl_img_url, pl_songs);
 		this.name_is_valid = false;
 		this.url_is_valid = false;
 	}
@@ -118,6 +118,7 @@ class newPlaylistPopup extends BasePopup{
 
 		var name_input = $("<input>", {id: "pl-name",
 						 type: "text",
+						 value: this.playlist.name,
 						 name:"pl_name",
 						 placeholder: "e.g Blood Sugar Sex Magic"})
 						.appendTo(name_label);
@@ -130,6 +131,7 @@ class newPlaylistPopup extends BasePopup{
 
 		var url_input = $("<input>", {id: 'pl-url',
 						 type: "text",
+						 value: this.playlist.img_url,
 						 name:"pl_url",
 						 placeholder: "http://"})
 						.appendTo(url_label);
@@ -153,10 +155,18 @@ class newPlaylistPopup extends BasePopup{
 		var image_preview_container = $("<div>", {class:"image-preview-container"})
 						.appendTo(content);
 
-		var image_preview_template = $("<div>", {class:"image-preview-template"})
-						.appendTo(image_preview_container)
-						.append($("<span>", {text: "Preview"}));
+		if(this.playlist.img_url == null) {
+			var image_preview_template = $("<div>", {class:"image-preview-template"})
+							.appendTo(image_preview_container)
+							.append($("<span>", {text: "Preview"}));
+		}
+		else{
+			var image_preview = $("<img>", {src: this.playlist.img_url})
+							.appendTo(image_preview_container);
+		}		
+
 	}
+
 
 	// _update_preview(e){
 	// 	var img_url = e.target.value;
@@ -296,15 +306,27 @@ class newPlaylistPopup extends BasePopup{
 		var new_songs_inputs = $("<div>", {id: "new-songs-inputs"})
 						.appendTo(form);
 
-		// var new_song = $("<div>", {class: "new-song"})
-		// 				.append($("<label>", {text: "Song URL"})
-		// 							.append($("<input>", {class:"song-url-input", type: "text", name:"song-url"})))
-		// 				.append($("<label>", {text: "Name:", class:"song-name-input"})
-		// 							.append($("<input>", {type: "text", name:"song-name"})));
-
-		// $(".song-url-input").on('input', (e) => {console.dir(e);});
-		// $(new_song).find(".song-url-input").on('input', (e) => {console.dir(e);});
-
+		//If songs exists (Edit Mode)
+		if(this.playlist.songs != null){
+			for(var i = 0; i<this.playlist.songs.length; i++){
+				var new_song = $("<div>", {class: "new-song"});
+				var song_url = $("<label>", {text: "Song URL"})
+										.append($("<input>", {type: "text",
+															  name:"song-url",
+															  value: this.playlist.songs[i].url}))
+										.appendTo(new_song);
+				var song_name =$("<label>", {text: "Name:"})
+										.append($("<input>", {type: "text",
+															  name:"song-name", 
+															  value: this.playlist.songs[i].name}))
+										.appendTo(new_song);
+				song_url.find('input').on('input', (e) => {this._check_song_url(e)});
+				song_name.find('input').on('input', (e) => {this._check_song_name(e)});
+				
+				new_song.appendTo(this.popup_main.find("#new-songs-inputs"));
+			}
+		}
+		
 		var buttons = $("<div>", {id: "buttons"}).appendTo(form);
 
 		var btn_add_song = $("<button>", {click: (e)=>{this._add_new_song_inputs(e)}})
@@ -323,7 +345,8 @@ class newPlaylistPopup extends BasePopup{
 		e.preventDefault();
 
 		var new_song = $("<div>", {class: "new-song"})
-						.append($("<label>", {text: "Song URL"})
+						.append($("<label>", {text: "Song URL",
+											  dblclick: (e) => {$(e.target).parent().remove();}})
 									.append($("<input>", {class:"song-url-input", type: "text", name:"song-url"})))
 						.append($("<label>", {text: "Name:"})
 									.append($("<input>", {class:"song-name-input", type: "text", name:"song-name"})));
@@ -368,6 +391,7 @@ class newPlaylistPopup extends BasePopup{
 
 	_finish_and_save(e){
 		e.preventDefault();
+		
 		var songs  = [];
 		var all_inputs_are_valid = true;
 		$(".add-pl-songs").find(".new-song").each(function(index, el) {
@@ -435,109 +459,123 @@ class editPlaylistPopup extends newPlaylistPopup{
 	}
 
 	build(){
-		this._build_popup_container();
-		this._build_edit_playlist();
+		super.build();
+		this.name_is_valid = true;
+		this.img_is_valid = true;
+
+		$('form').on('reset', (e) => { $('#popup-main').find('input').each((index, el) => {
+				this.img_is_valid = true;
+				if($(el).hasClass('input-err')){
+					$(el).removeClass('input-err')
+				}			
+			});
+		})
 	}
 
-	_build_edit_playlist(){
-		var header = $("<header>", {text: "Edit Playlist"})
-						.appendTo(this.popup_main);
+	// build(){
+	// 	this._build_popup_container();
+	// 	this._build_edit_playlist();
+	// }
 
-		var content = $("<div>", {class: "add-new-pl-content"})
-						.appendTo(this.popup_main);
+	// _build_edit_playlist(){
+	// 	var header = $("<header>", {text: "Edit Playlist"})
+	// 					.appendTo(this.popup_main);
 
-		var form = $("<form>").appendTo(content);
+	// 	var content = $("<div>", {class: "add-new-pl-content"})
+	// 					.appendTo(this.popup_main);
 
-		var inputs = $("<div>").appendTo(form);
+	// 	var form = $("<form>").appendTo(content);
 
-		var name_label = $("<label>", {text: "Playlist Name"})
-						.appendTo(inputs);
+	// 	var inputs = $("<div>").appendTo(form);
 
-		var name_input = $("<input>", {id: "pl-name",
-						 type: "text",
-						 value: this.playlist.name,
-						 name:"pl_name",
-						 placeholder: "e.g Blood Sugar Sex Magic"})
-						.appendTo(name_label);
-		name_input.focus();
+	// 	var name_label = $("<label>", {text: "Playlist Name"})
+	// 					.appendTo(inputs);
 
-		var url_label = $("<label>", {text: "Playlist URL"})
-						.appendTo(inputs);
+	// 	var name_input = $("<input>", {id: "pl-name",
+	// 					 type: "text",
+	// 					 value: this.playlist.name,
+	// 					 name:"pl_name",
+	// 					 placeholder: "e.g Blood Sugar Sex Magic"})
+	// 					.appendTo(name_label);
+	// 	name_input.focus();
 
-		var url_input = $("<input>", {id: 'pl-url',
-						 type: "text",
-						 value: this.playlist.img_url,
-						 name:"pl_url",
-						 placeholder: "http://"})
-						.appendTo(url_label);
+	// 	var url_label = $("<label>", {text: "Playlist URL"})
+	// 					.appendTo(inputs);
 
-		var buttons = $("<div>", {class: "add-new-pl-content-btns"})
-						.appendTo(form);
+	// 	var url_input = $("<input>", {id: 'pl-url',
+	// 					 type: "text",
+	// 					 value: this.playlist.img_url,
+	// 					 name:"pl_url",
+	// 					 placeholder: "http://"})
+	// 					.appendTo(url_label);
 
-		var next_btn = $("<input>", {id: "next",
-						 click: (e)=>{this._next(e)},
-						 type: "submit",
-						 value:"Next"})
-						.appendTo(buttons);
+	// 	var buttons = $("<div>", {class: "add-new-pl-content-btns"})
+	// 					.appendTo(form);
 
-		var reset_btn = $("<input>", {id: "reset",
-		 				 type: "reset",
-		 				 value:"Reset Fields"})
-						.appendTo(buttons);
+	// 	var next_btn = $("<input>", {id: "next",
+	// 					 click: (e)=>{this._next(e)},
+	// 					 type: "submit",
+	// 					 value:"Next"})
+	// 					.appendTo(buttons);
 
-		var image_preview = $("<div>", {class:"image-preview-container"})
-						.append($("<img>", {src: this.playlist.img_url}))
-						.appendTo(content);
-	}
+	// 	var reset_btn = $("<input>", {id: "reset",
+	// 	 				 type: "reset",
+	// 	 				 value:"Reset Fields"})
+	// 					.appendTo(buttons);
 
-	_next(e){
-		e.preventDefault();
-		this.playlist.name = this.popup_main.find('#pl-name').val();
-		this.playlist.img_url = this.popup_main.find('#pl-url').val();
-		this._build_edit_plsylist_songs();
-	}
+	// 	var image_preview = $("<div>", {class:"image-preview-container"})
+	// 					.append($("<img>", {src: this.playlist.img_url}))
+	// 					.appendTo(content);
+	// }
 
-	_build_edit_plsylist_songs(){
-		this.popup_main.empty();
-		this.popup_main.removeClass("add-new-pl");
-		this.popup_main.addClass("add-pl-songs");
+	// _next(e){
+	// 	e.preventDefault();
+	// 	this.playlist.name = this.popup_main.find('#pl-name').val();
+	// 	this.playlist.img_url = this.popup_main.find('#pl-url').val();
+	// 	this._build_edit_plsylist_songs();
+	// }
 
-		var header = $("<header>", {text: "Edit Playlist Songs"})
-						.appendTo(this.popup_main);
+	// _build_edit_plsylist_songs(){
+	// 	this.popup_main.empty();
+	// 	this.popup_main.removeClass("add-new-pl");
+	// 	this.popup_main.addClass("add-pl-songs");
+
+	// 	var header = $("<header>", {text: "Edit Playlist Songs"})
+	// 					.appendTo(this.popup_main);
 		
-		var form = $("<form>").appendTo(this.popup_main);
+	// 	var form = $("<form>").appendTo(this.popup_main);
 
-		var new_songs_inputs = $("<div>", {id: "new-songs-inputs"})
-						.appendTo(form);
+	// 	var new_songs_inputs = $("<div>", {id: "new-songs-inputs"})
+	// 					.appendTo(form);
 
-		var new_song = $("<div>", {class: "new-song"})
-						.append($("<label>", {text: "Song URL"})
-									.append($("<input>", {type: "text", name:"song-url"})))
-						.append($("<label>", {text: "Name:"})
-									.append($("<input>", {type: "text", name:"song-name"})));
+	// 	// var new_song = $("<div>", {class: "new-song"})
+	// 	// 				.append($("<label>", {text: "Song URL"})
+	// 	// 							.append($("<input>", {type: "text", name:"song-url"})))
+	// 	// 				.append($("<label>", {text: "Name:"})
+	// 	// 							.append($("<input>", {type: "text", name:"song-name"})));
 
-		var buttons = $("<div>", {id: "buttons"}).appendTo(form);
+	// 	var buttons = $("<div>", {id: "buttons"}).appendTo(form);
 
-		for(var i = 0; i<this.playlist.songs.length; i++){
-			var new_song = $("<div>", {class: "new-song"})
-						.append($("<label>", {text: "Song URL"})
-									.append($("<input>", {type: "text", name:"song-url", value: this.playlist.songs[i].url})))
-						.append($("<label>", {text: "Name:"})
-									.append($("<input>", {type: "text", name:"song-name", value: this.playlist.songs[i].name})));
-			new_song.appendTo(this.popup_main.find("#new-songs-inputs"));
-		}
+	// 	for(var i = 0; i<this.playlist.songs.length; i++){
+	// 		var new_song = $("<div>", {class: "new-song"})
+	// 					.append($("<label>", {text: "Song URL"})
+	// 								.append($("<input>", {type: "text", name:"song-url", value: this.playlist.songs[i].url})))
+	// 					.append($("<label>", {text: "Name:"})
+	// 								.append($("<input>", {type: "text", name:"song-name", value: this.playlist.songs[i].name})));
+	// 		new_song.appendTo(this.popup_main.find("#new-songs-inputs"));
+	// 	}
 
-		var btn_add_song = $("<button>", {click: (e)=>{this._add_new_song_inputs(e)}})
-							.append($("<span>", {class: "glyphicon glyphicon-plus-sign"}))
-							.append($("<span>", {text: "Add another song"}))
-							.appendTo(buttons);
+	// 	var btn_add_song = $("<button>", {click: (e)=>{this._add_new_song_inputs(e)}})
+	// 						.append($("<span>", {class: "glyphicon glyphicon-plus-sign"}))
+	// 						.append($("<span>", {text: "Add another song"}))
+	// 						.appendTo(buttons);
 
-		var submit = $("<input>", {type: "submit",
-								   value: "FINISH & SAVE",
-								   click: (e) => {this._finish_and_save(e)}})
-							.appendTo(buttons);
+	// 	var submit = $("<input>", {type: "submit",
+	// 							   value: "FINISH & SAVE",
+	// 							   click: (e) => {this._finish_and_save(e)}})
+	// 						.appendTo(buttons);
 
-	}
+	// }
 
 	_update_playlist(){
 
@@ -600,15 +638,55 @@ class editPlaylistPopup extends newPlaylistPopup{
 
 	_finish_and_save(e){
 		e.preventDefault();
+		var songs  = [];
+		var all_inputs_are_valid = true;
+		$(".add-pl-songs").find(".new-song").each(function(index, el) {
+			var inputs = $(el).find('input');
+			var song_url = $(inputs[0]).val(); 
+			var song_name = $(inputs[1]).val();
 
-		var promises = [];
-		var update_pl = this._update_playlist();
-		var update_songs = this._update_songs();
-		promises.push(update_pl);
-		promises.push(update_songs);
+			all_inputs_are_valid = all_inputs_are_valid && BasePopup.isNameValid(song_name) && BasePopup.isSongUrlValid(song_url);
+			
+			if(song_url != "" && song_name !=""){
+				songs.push({"name": song_name, "url": song_url});
+			}
+			else{
+				if (song_url == ""){
+					console.dir($(el));
+					$(el).find(".song-url-input").addClass('input-err');
+				}
+				if (song_name == ""){
+					$(el).find(".song-name-input").addClass('input-err');
+				}
+			}
+			
+		});
+		
+		if(all_inputs_are_valid){
 
-		Promise.all(promises).then((data)=>{this._remove(); Playlist.buildAll()})
+			var promises = [];
+			var update_pl = this._update_playlist();
+			var update_songs = this._update_songs();
+			promises.push(update_pl);
+			promises.push(update_songs);
+
+			Promise.all(promises).then((data)=>{this._remove(); Playlist.buildAll()})
+		}	
 	}
+
+
+
+	// _finish_and_save(e){
+	// 	e.preventDefault();
+
+	// 	var promises = [];
+	// 	var update_pl = this._update_playlist();
+	// 	var update_songs = this._update_songs();
+	// 	promises.push(update_pl);
+	// 	promises.push(update_songs);
+
+	// 	Promise.all(promises).then((data)=>{this._remove(); Playlist.buildAll()})
+	// }
 
 
 }
