@@ -34,14 +34,15 @@
 // function curvedText(text, radius){
 // 	var text = text.split("");
 // 	var deg_offset = 100 / text.length;
-// 	var deg_origin = 0;
+// 	var deg_origin = deg_offset * (-1);
 // 	var class_index = document.getElementsByClassName("curved-header")[0];
+// 	$(class_index).empty();
 // 	console.dir(class_index);
 
 // 	text.forEach((ea) => {
-//     	ea = `<p style='height:${radius}px;position:absolute;transform:rotate(${deg_origin}deg);transform-origin:0 100%'>${ea}</p>`;
+//     	ea = `<span style='height:${radius}px;position:absolute; top:-28px; left: -7px; transform:rotate(${deg_origin}deg);transform-origin:0 100%'>${ea}</span>`;
 //     	class_index.innerHTML += ea;
 //     	deg_origin += deg_offset;
 //   });
 // }
-// curvedText("test", 110)
+// curvedText("test", 156)

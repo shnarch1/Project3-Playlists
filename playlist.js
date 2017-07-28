@@ -7,13 +7,22 @@ class Playlist {
 		this.songs = songs;
 	}
 
-	build(id, container_name, tabindex){
+	build(id, container_name){
 		var pl_container = $("<div>", {class:"plasylist-container",
 									   "data-id":id,
-										tabindex: tabindex});
+										tabindex: 0});
+		pl_container.on("keyup", (e)=>{
+			if (e.keyCode === 13){
+				$(e.target).find('.play-pl').click();
+			}
+		 });
+
 		var pl_header = $("<div>", {class:"curved-header",
 									text:this.name})
 									.appendTo(pl_container);
+
+		
+
 		var pl_img_container = $("<div>", {class:"pl-img-container"})
 									.appendTo(pl_container);
 		var pl_img = $("<img>", {src:this.img_url}).appendTo(pl_img_container);
@@ -32,7 +41,8 @@ class Playlist {
 
 		var pl_circle = $("<div>", {class:"circle"}).appendTo(pl_img_container);
 		
-		var play_btn = $("<button>", {class: "play-pl", text: "\u25B6", click: (e) => {this._play(e)}})
+		var play_btn = $("<button>", {class: "play-pl", text: "\u25B6",
+									  click: (e) => {this._play(e)}})
 									.appendTo(pl_circle);
 
 		pl_container.appendTo(container_name);
@@ -40,15 +50,19 @@ class Playlist {
 
 	static buildAll(){
 		$('#playlists').empty();
-		var tabindex = 3;
-		fetch("api/playlist").then((response)=>{return response.json()})
+		fetch("api/playlist")
+		.then((response)=>{return response.json()})
 				 .then(function(data){
 				 	for(var i=0; i<data.data.length; i++){
 				 		var playlist = new Playlist(null, data.data[i].name, data.data[i].image, data.data[i].songs);
-				 		playlist.build(data.data[i].id, '#playlists', tabindex);
-				 		tabindex++;
+				 		playlist.build(data.data[i].id, '#playlists');
 				 	}					 	
-				 })
+		})
+	 	.then(()=>{
+	 		var $headers = $(".curved-header");
+		 	$headers.arctext({radius: 150});
+	 	})
+		 	
 
 	}
 
@@ -56,7 +70,11 @@ class Playlist {
 		var pl_container = e.target.closest('.plasylist-container');
 		var pl_id = pl_container.dataset.id;
 		Playlist.delete_playlist(pl_id)
-		.then(() => {$(pl_container).remove()});
+		.then(() => {
+			$(pl_container).remove();
+			$('#player-container').remove();
+			$('#del-edit-btns').remove();
+		});
 	}
 
 	static delete_playlist(id){

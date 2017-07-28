@@ -104,6 +104,7 @@
 	}
 
 	.curved-header{
+		position: relative;
 		color red;
 		display: inline-block;
 	}
@@ -176,12 +177,13 @@
 	.plasylist-container:hover .circle .play-pl, 
 	.plasylist-container:hover .del-edit-btns-container,
 	.plasylist-container:focus .circle .play-pl,
-	.plasylist-container:focus .del-edit-btns-container
+	.plasylist-container:focus .del-edit-btns-container,
+	.circle:focus .play-pl, .del-edit-btns-container:focus
 	{
 		visibility: visible;
 	}
 
-	.plasylist-container:hover{
+	.plasylist-container:hover, .plasylist-container:focus{
 		opacity: 1;
 	}
 
@@ -214,6 +216,7 @@
 
 
 </style>
+ <link rel="stylesheet" type="text/css" href="style.css">
  <link rel="stylesheet" type="text/css" href="new_pl.css">
  <link rel="stylesheet" type="text/css" href="new_pl_songs.css">
  <link rel="stylesheet" type="text/css" href="player.css">
@@ -269,6 +272,7 @@
 	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="jquery.arctext.js"></script>
 <script src="playlist.js"></script>
 <script src="popup.js"></script>
 <script src="player.js"></script>
