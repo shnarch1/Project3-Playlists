@@ -305,6 +305,9 @@ class newPlaylistPopup extends BasePopup{
 			if (!$(e.target).hasClass('input-err')){
 				$(e.target).addClass('input-err');			
 			}
+			if (e.target.value == "" && $(e.target).hasClass('input-err')){
+				$(e.target).removeClass('input-err');
+			}
 			return false;
 		}
 		else{
@@ -321,11 +324,14 @@ class newPlaylistPopup extends BasePopup{
 			if (!$(e.target).hasClass('input-err')){
 				$(e.target).addClass('input-err');			
 			}
+			if (e.target.value == "" && $(e.target).hasClass('input-err')){
+				$(e.target).removeClass('input-err');
+			}
 			return false;
 		}
 		else{
 			if ($(e.target).hasClass('input-err')){
-				$(e.target).removeClass('input-err')
+				$(e.target).removeClass('input-err');
 			}
 			return true;
 		}

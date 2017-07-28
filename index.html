@@ -88,105 +88,6 @@
 
 	}
 
-	.plasylist-container{
-		--pl-container-w:250px;
-		--pl-img-w: var(--pl-container-w);
-		--pl-img-h: var(--pl-container-w);
-		--circle-w: calc(var(--pl-img-w) / 6);
-		--circle-h: calc(var(--pl-img-h) / 6);
-		display: flex;
-		font: 26px Monaco, MonoSpace;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		width:var(--pl-container-w);
-		opacity: .85;
-	}
-
-	.curved-header{
-		position: relative;
-		color red;
-		display: inline-block;
-	}
-
-	.pl-img-container{
-		position: relative;
-	}
-	
-
-	.pl-img-container img{
-		display: block; /*In order to remove the gap under the image*/
-		width: var(--pl-img-w);
-		height: var(--pl-img-h);
-		border-radius: 50%;
-	}
-
-
-.del-edit-btns-container{
-		visibility: hidden;
-		position: absolute;
-		top: 10px;
-		left: 88px;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		width: 30%;
-	}
-
-	.del-edit-btns-container button{
-		background-color: white;
-		border: none;
-		border-radius: 50%;
-		height: 30px;
-		width: 30px;
-		font-size: large;
-	}
-
-	.del-edit-btns-container button:focus{
-		outline: none;
-	}
-
-	.circle{
-		position: relative;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: absolute;
-		width: var(--circle-w);
-		height: var(--circle-h);
-		left: calc(var(--pl-img-w) / 2 - var(--circle-w) / 2);
-		top: calc((var(--pl-img-h) / 2) - (var(--circle-h) / 2));
-		background-color: white;
-		border-radius: 50%;
-		z-index: 100;
-	}
-
-	.circle .play-pl{
-		position: absolute;
-		left: 9px;
-		top: 3px;
-		visibility: hidden;
-		background-color: transparent;
-		border: none;
-	}
-
-	.circle .play-pl:focus{
-		outline: none;
-	}
-
-	.plasylist-container:hover .circle .play-pl, 
-	.plasylist-container:hover .del-edit-btns-container,
-	.plasylist-container:focus .circle .play-pl,
-	.plasylist-container:focus .del-edit-btns-container,
-	.circle:focus .play-pl, .del-edit-btns-container:focus
-	{
-		visibility: visible;
-	}
-
-	.plasylist-container:hover, .plasylist-container:focus{
-		opacity: 1;
-	}
-
 	#popup-container{
 		--btn-bg-color: rgba(0, 31, 63, 0.5);
 		--btn-txt-color: white;
@@ -217,6 +118,7 @@
 
 </style>
  <link rel="stylesheet" type="text/css" href="css/style.css">
+ <link rel="stylesheet" type="text/css" href="css/playlist.css">
  <link rel="stylesheet" type="text/css" href="css/new_pl.css">
  <link rel="stylesheet" type="text/css" href="css/new_pl_songs.css">
  <link rel="stylesheet" type="text/css" href="css/player.css">
